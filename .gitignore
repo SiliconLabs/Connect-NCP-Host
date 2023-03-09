@@ -1,0 +1,8 @@
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Build files
+/build
+*.d
+*.o
