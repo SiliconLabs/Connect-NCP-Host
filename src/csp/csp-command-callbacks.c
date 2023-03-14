@@ -17,13 +17,13 @@
 // *** Generated file. Do not edit! ***
 // vNCP Version: 1.0
 
-#include "stack/include/ember.h"
+#include "connect/ember.h"
 
 #include <stdlib.h>
 #include <assert.h>
 #include "csp-format.h"
 #include "csp-command-utils.h"
-#include "stack/framework/callback_dispatcher.h"
+#include "connect/callback_dispatcher.h"
 #include "csp-api-enum-gen.h"
 
 static void stackStatusCommandHandler(uint8_t *callbackParams)

@@ -21,7 +21,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "stack/include/byte-utilities.h"
+#include "connect/byte-utilities.h"
 
 // TODO: the two functions below can be consolidated
 

@@ -17,7 +17,7 @@
 // *** Generated file. Do not edit! ***
 // vNCP Version: 1.0
 
-#include "stack/include/ember.h"
+#include "connect/ember.h"
 
 #include "csp-format.h"
 #include "csp-command-utils.h"

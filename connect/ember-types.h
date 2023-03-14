@@ -45,10 +45,6 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-#include "stack/config/ember-configuration-defaults.h"
-#endif //DOXYGEN_SHOULD_SKIP_THIS
-
 /**
  * @brief Size of an extended PAN identifier in bytes (8).
  */
