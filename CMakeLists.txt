@@ -19,7 +19,8 @@ add_library(connect-host-lib
             src/host-common/cpc-host.c
             src/host-common/ncp-host-common.c
             src/host-common/callback-queue.c
-            src/host-common/lib-init.c)
+            src/host-common/lib-init.c
+            src/log/log.c)
 
 set_target_properties(connect-host-lib PROPERTIES VERSION ${PROJECT_VERSION})
 

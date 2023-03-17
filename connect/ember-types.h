@@ -852,11 +852,6 @@ typedef struct {
 #define EMBER_LIBRARY_IS_STUB               0x00
 #define EMBER_LIBRARY_ERROR                 0xFF
 
-#define emberDebugPrintf(...)
-#define emLog(type, ...)
-#define emLogLine(type, ...)
-#define emLogBytes(type, format, bytes, count, ...)
-
 #endif //DOXYGEN_SHOULD_SKIP_THIS
 
 /**
