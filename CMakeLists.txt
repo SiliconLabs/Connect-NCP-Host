@@ -48,9 +48,11 @@ set_property(TARGET connecthost PROPERTY
 
 target_link_libraries(connecthost PRIVATE cpc)
 
-target_link_libraries(connect-host-lib PRIVATE cpc)
+configure_file(connecthost.pc.in connecthost.pc @ONLY)
 
 include(GNUInstallDirs)
 install (TARGETS connecthost
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/connect)
+install(FILES ${CMAKE_BINARY_DIR}/connecthost.pc
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig)
