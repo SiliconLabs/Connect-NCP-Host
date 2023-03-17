@@ -1,6 +1,6 @@
 # Connect stack lib
 cmake_minimum_required(VERSION  3.16.3)
-project(connect-host-lib VERSION 0.1.0 DESCRIPTION "Connect NCP Host Lib")
+project(connecthost VERSION 0.1.0 DESCRIPTION "Connect NCP Host Lib")
 
 include(CheckIncludeFile)
 check_include_file(sl_cpc.h LIBCPC_FOUND)
@@ -8,8 +8,8 @@ check_include_file(sl_cpc.h LIBCPC_FOUND)
 add_definitions(-DUNIX_HOST
                 -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
                 )
-
-add_library(connect-host-lib
+                
+add_library(connecthost
             SHARED
             src/stack/framework/byte-utilities.c
             src/stack/framework/callback_dispatcher.c
@@ -22,14 +22,14 @@ add_library(connect-host-lib
             src/host-common/lib-init.c
             src/log/log.c)
 
-set_target_properties(connect-host-lib PROPERTIES VERSION ${PROJECT_VERSION})
-
-target_include_directories(connect-host-lib
+set_target_properties(connecthost PROPERTIES VERSION ${PROJECT_VERSION})
+            
+target_include_directories(connecthost 
                             PRIVATE
                             src/
                             ./)
 
-set_property(TARGET connect-host-lib PROPERTY
+set_property(TARGET connecthost PROPERTY
             PUBLIC_HEADER
             connect/ncp.h
             connect/ember.h
@@ -46,9 +46,11 @@ set_property(TARGET connect-host-lib PROPERTY
             connect/stack-info.h
             connect/version.h)
 
+target_link_libraries(connecthost PRIVATE cpc)
+
 target_link_libraries(connect-host-lib PRIVATE cpc)
 
 include(GNUInstallDirs)
-install (TARGETS connect-host-lib
+install (TARGETS connecthost
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/connect)

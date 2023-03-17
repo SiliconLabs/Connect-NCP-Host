@@ -37,7 +37,7 @@ sudo ldconfig
 Then, in your application CMakelists simply add 
 
 ```
-target_link_libraries(your_app_executable PUBLIC connect-host-lib)
+target_link_libraries(your_app_executable PUBLIC connecthost)
 ```
 
 The Connect API contains every function callable by the host application. It allows every functionality that is available on the SoC. The user can see what is available to him by consulting the connect-api.h header located at the root of the library.
