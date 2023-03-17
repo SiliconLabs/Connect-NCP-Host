@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <assert.h>
+#include "log/log.h"
 #include "csp/csp-format.h"
 #include "csp/csp-command-utils.h"
 #include "cpc-host.h"
@@ -63,7 +64,6 @@ bool isCurrentTaskStackTask(void)
 void commandMutexInit(void)
 {
   if (pthread_mutex_init(&lock, NULL) != 0) {
-    printf("\n mutex init has failed\n");
-    exit(1);
+    FATAL(1, "Mutex init has failed");
   }
 }

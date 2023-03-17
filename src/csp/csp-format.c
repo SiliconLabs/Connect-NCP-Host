@@ -20,7 +20,7 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <string.h>
-
+#include "log/log.h"
 #include "connect/byte-utilities.h"
 
 // TODO: the two functions below can be consolidated
@@ -132,7 +132,7 @@ uint8_t computeCommandLength(uint8_t initialLength, const char* format, va_list 
         break;
       }
       default:
-        assert(false);
+        FATAL(1, "Invalid argument type");
         break;
     }
   }
@@ -220,14 +220,14 @@ uint16_t formatResponseCommandFromArgList(uint8_t *buffer,
       }
       default:
         // confused!
-        assert(false);
+        BUG("Invalid argument type while formating serialized command");
         break;
     }
   }
 
   uint16_t length = finger - buffer;
   // sanity check
-  assert(length <= bufferSize);
+  BUG_ON(length > bufferSize, "Buffer overflow: command length is longer than the command buffer size");
 
   return length;
 }

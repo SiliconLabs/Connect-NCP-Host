@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include "log/log.h"
 #include "csp-format.h"
 #include "csp-command-utils.h"
 #include "connect/callback_dispatcher.h"
@@ -317,7 +318,7 @@ void sli_connect_ncp_handle_indication(uint16_t commandId,
       frequencyHoppingStartClientCompleteCommandHandler(callbackParams);
       break;
     default: {
-      assert(0);
+      FATAL(1, "Unknown incoming callback command id: %04X", commandId);
     }
   }
 }

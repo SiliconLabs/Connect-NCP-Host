@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <poll.h>
+#include "log/log.h"
 #include "connect/ncp.h"
 #include "csp/csp-format.h"
 #include "callback-queue.h"
@@ -18,7 +19,7 @@ static struct pollfd poll_fds;
 void sli_init_callback_queue()
 {
   if (pipe(pipe_fds) < 0) {
-    exit(1);
+    FATAL(1, "Could not initialize callback queue (can't open pipe)");
   }
   poll_fds.fd = pipe_fds[0];
   poll_fds.events = POLLIN;
@@ -50,7 +51,7 @@ void sl_connect_ncp_handle_pending_callback_commands()
     finger += command_length;
     bytes_to_read += -(command_length + sizeof(uint16_t));
 
-    assert(bytes_to_read >= 0);
+    FATAL_ON(bytes_to_read < 0, 1, "Missing data in callback queue");
   }
 }
 

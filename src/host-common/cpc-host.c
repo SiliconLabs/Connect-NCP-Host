@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <poll.h>
 #include <assert.h>
+#include "log/log.h"
 #include "sl_cpc.h"
 #include "cpc-host.h"
 #include "csp/csp-format.h"
@@ -47,13 +48,13 @@ static void init_file_descriptor(int fd)
 static void reset_crash_callback(void)
 {
   crash_happened = true;
-  printf("Crash happened\n");
+  FATAL(1, "Communication with CPC daemon has been severed");
 }
 
 void cpc_host_startup(void)
 {
   int ret;
-  printf("Trying to init cpc...\n");
+  INFO("Trying to init cpc...");
   do {
     ret = cpc_init(&lib_handle,
                    NULL,     //default instance name (cpcd_0)
@@ -62,7 +63,7 @@ void cpc_host_startup(void)
     usleep(100000);
   } while (ret != 0);
 
-  printf("CPC initialized on Host\n");
+  INFO("CPC initialized on Host");
 
   int fd = cpc_open_endpoint(lib_handle,
                              &endpoint,
@@ -88,7 +89,7 @@ void cpc_host_startup(void)
       init_file_descriptor(fd);
     }
   } else {
-    printf("Error: Secondary endpoint not opened\n");
+    FATAL(1, "Secondary endpoint not opened");
   }
 }
 
@@ -101,8 +102,7 @@ int cpc_rx(void *buf, unsigned int buf_len)
 {
   int len = cpc_read_endpoint(endpoint, buf, buf_len, 0);
   if (!len || len < 0) {
-    printf("Error : cpc_rx\n");
-    exit(1);
+    FATAL(1, "Secondary can not be reached");
   }
   return len;
 }
@@ -135,7 +135,7 @@ void sl_connect_ncp_poll_cb(void)
       sli_connect_ncp_append_callback_command(responseBuffer, command_length);
       break;
     default:
-      assert(false);
+      FATAL(1, "Unknown incoming command type");
       break;
   }
 }
