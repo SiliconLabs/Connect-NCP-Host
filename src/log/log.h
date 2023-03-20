@@ -21,6 +21,7 @@
 #include <string.h>
 #include <signal.h>
 #include <time.h>
+#include "backtrace_show.h"
 
 extern FILE *g_trace_stream;
 extern unsigned int g_enabled_traces;
@@ -138,6 +139,7 @@ void __tr_exit();
       __PRINT_WITH_LINE(91, "bug: " MSG, ##__VA_ARGS__); } \
     else {                                                 \
       __PRINT_WITH_LINE(91, "bug"); }                      \
+    backtrace_show();                                      \
     raise(SIGTRAP);                                        \
     __builtin_unreachable();                               \
   } while (0)
@@ -149,6 +151,7 @@ void __tr_exit();
         __PRINT_WITH_LINE(91, "bug: " MSG, ##__VA_ARGS__); } \
       else {                                                 \
         __PRINT_WITH_LINE(91, "bug: \"%s\"", #COND); }       \
+      backtrace_show();                                      \
       raise(SIGTRAP);                                        \
       __builtin_unreachable();                               \
     }                                                        \
