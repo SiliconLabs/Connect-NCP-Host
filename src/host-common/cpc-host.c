@@ -95,6 +95,8 @@ void cpc_host_startup(void)
 
 int cpc_tx(const void *buf, unsigned int buf_len)
 {
+  TRACE(TR_CSP_FULL, "CPC TX: %s", tr_csp_full(buf, buf_len));
+  TRACE(TR_CSP_ID, "CPC TX: %s", tr_csp_id(emberFetchHighLowInt16u(buf)));
   return cpc_write_endpoint(endpoint, buf, buf_len, 0);
 }
 
@@ -126,6 +128,9 @@ void sl_connect_ncp_poll_cb(void)
 {
   uint16_t command_length = cpc_rx(responseBuffer, 4096);
   uint8_t commandOrigin = responseBuffer[0];
+
+  TRACE(TR_CSP_FULL, "CPC RX: %s", tr_csp_full(responseBuffer, command_length));
+  TRACE(TR_CSP_ID, "CPC RX: %s", tr_csp_id(emberFetchHighLowInt16u(responseBuffer)));
 
   switch (commandOrigin) {
     case (VNCP_CMD_ID & 0xFF00) >> 8:

@@ -27,8 +27,19 @@ extern unsigned int g_enabled_traces;
 extern bool g_enable_color_traces;
 
 enum {
-  TR_CSP_ID = 0x0001,
-  TR_CPC = 0x0002,
+  TR_CSP_ID   = (1 << 0),
+  TR_CSP_FULL = (1 << 1),
+  TR_CB_QUEUE = (1 << 2)
+};
+
+enum str_bytes_options {
+  DELIM_SPACE     = (1 << 0),   // Add space between each bytes
+  DELIM_COLON     = (1 << 1),   // Add colon between each bytes
+  ELLIPSIS_ABRT   = (1 << 2),   // Assert if output is too small
+  ELLIPSIS_STAR   = (1 << 3),   // End output with * if too small
+  ELLIPSIS_DOTS   = (1 << 4),   // End output with ... if too small
+  UPPER_HEX       = (1 << 5),   // Use upper letters for hexadecimal digits
+  ONLY_ALNUM      = (1 << 6),   // In str_bytes_ascii() print other printable char with hexa
 };
 
 #define STR_MAX_LEN_CSP_ID     19
@@ -44,7 +55,9 @@ enum {
 #define BUG_ON(COND, ...)         __BUG_ON(COND, "" __VA_ARGS__)
 
 char *str_csp_id(uint16_t in, char out[STR_MAX_LEN_CSP_ID]);
+char *str_csp_full(const uint8_t *in, int in_len, char *out, int out_len);
 const char *tr_csp_id(uint16_t in);
+const char *tr_csp_full(const uint8_t in[], int in_len);
 void __tr_enter();
 void __tr_exit();
 
