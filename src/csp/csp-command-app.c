@@ -28,11 +28,11 @@ EmberNetworkStatus emberNetworkState(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_NETWORK_STATE_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_NETWORK_STATE_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberNetworkStatus networkStatus;
   fetchApiParams(apiCommandData,
@@ -47,11 +47,11 @@ bool emberStackIsUp(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_STACK_IS_UP_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_STACK_IS_UP_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   bool stackIsUp;
   fetchApiParams(apiCommandData,
@@ -67,12 +67,12 @@ EmberStatus emberSetSecurityKey(EmberKeyData *key)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_SECURITY_KEY_IPC_COMMAND_ID,
-                        "b",
-                        key, sizeof(EmberKeyData));
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_SECURITY_KEY_IPC_COMMAND_ID,
+                                          "b",
+                                          key, sizeof(EmberKeyData));
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -90,13 +90,13 @@ EmberStatus emberGetSecurityKey(EmberKeyData *key)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_SECURITY_KEY_IPC_COMMAND_ID,
-                        "b",
-                        key->contents,
-                        EMBER_ENCRYPTION_KEY_SIZE);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_SECURITY_KEY_IPC_COMMAND_ID,
+                                          "b",
+                                          key->contents,
+                                          EMBER_ENCRYPTION_KEY_SIZE);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
 
@@ -119,12 +119,12 @@ EmberStatus emberSetPsaSecurityKey(mbedtls_svc_key_id_t key_id)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_PSA_SECURITY_KEY_IPC_COMMAND_ID,
-                        "w",
-                        key_id);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_PSA_SECURITY_KEY_IPC_COMMAND_ID,
+                                          "w",
+                                          key_id);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -142,11 +142,11 @@ EmberStatus emberRemovePsaSecurityKey(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_REMOVE_PSA_SECURITY_KEY_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_REMOVE_PSA_SECURITY_KEY_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -164,12 +164,12 @@ EmberStatus emberGetCounter(EmberCounterType counterType,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_COUNTER_IPC_COMMAND_ID,
-                        "u",
-                        counterType);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_COUNTER_IPC_COMMAND_ID,
+                                          "u",
+                                          counterType);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
 
@@ -187,13 +187,13 @@ EmberStatus emberSetRadioChannelExtended(uint16_t channel,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_RADIO_CHANNEL_EXTENDED_IPC_COMMAND_ID,
-                        "vu",
-                        channel,
-                        persistent);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_RADIO_CHANNEL_EXTENDED_IPC_COMMAND_ID,
+                                          "vu",
+                                          channel,
+                                          persistent);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -209,12 +209,12 @@ EmberStatus emberSetRadioChannel(uint16_t channel)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_RADIO_CHANNEL_IPC_COMMAND_ID,
-                        "v",
-                        channel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_RADIO_CHANNEL_IPC_COMMAND_ID,
+                                          "v",
+                                          channel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -231,11 +231,11 @@ uint16_t emberGetRadioChannel(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_RADIO_CHANNEL_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_RADIO_CHANNEL_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   uint16_t channel;
   fetchApiParams(apiCommandData,
@@ -251,13 +251,13 @@ EmberStatus emberSetRadioPower(int16_t power,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_RADIO_POWER_IPC_COMMAND_ID,
-                        "vu",
-                        power,
-                        persistent);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_RADIO_POWER_IPC_COMMAND_ID,
+                                          "vu",
+                                          power,
+                                          persistent);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -272,11 +272,11 @@ int16_t emberGetRadioPower(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_RADIO_POWER_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_RADIO_POWER_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   int16_t power;
   fetchApiParams(apiCommandData,
@@ -291,12 +291,12 @@ EmberStatus emberSetRadioPowerMode(bool radioOn)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_RADIO_POWER_MODE_IPC_COMMAND_ID,
-                        "u",
-                        radioOn);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_RADIO_POWER_MODE_IPC_COMMAND_ID,
+                                          "u",
+                                          radioOn);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -319,20 +319,20 @@ EmberStatus emberSetMacParams(int8_t ccaThreshold,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_MAC_PARAMS_IPC_COMMAND_ID,
-                        "suuuvvuwv",
-                        ccaThreshold,
-                        maxCcaAttempts,
-                        minBackoffExp,
-                        maxBackoffExp,
-                        ccaBackoff,
-                        ccaDuration,
-                        maxRetries,
-                        csmaTimeout,
-                        ackTimeout);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_MAC_PARAMS_IPC_COMMAND_ID,
+                                          "suuuvvuwv",
+                                          ccaThreshold,
+                                          maxCcaAttempts,
+                                          minBackoffExp,
+                                          maxBackoffExp,
+                                          ccaBackoff,
+                                          ccaDuration,
+                                          maxRetries,
+                                          csmaTimeout,
+                                          ackTimeout);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -347,11 +347,11 @@ uint16_t emberCurrentStackTasks(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_CURRENT_STACK_TASKS_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_CURRENT_STACK_TASKS_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   uint16_t currentTasks;
   fetchApiParams(apiCommandData,
@@ -367,11 +367,11 @@ bool emberOkToNap(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_OK_TO_NAP_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_OK_TO_NAP_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   bool isOkToNap;
   fetchApiParams(apiCommandData,
@@ -389,11 +389,11 @@ bool emberOkToHibernate(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_OK_TO_HIBERNATE_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_OK_TO_HIBERNATE_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   bool isOkToHibernate;
   fetchApiParams(apiCommandData,
@@ -411,11 +411,11 @@ uint8_t* emberGetEui64(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_EUI64_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_EUI64_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   static uint8_t eui64[EUI64_SIZE];
   uint8_t eui64Size = EUI64_SIZE;
@@ -434,15 +434,15 @@ EmberStatus emberMacGetParentAddress(EmberMacAddress *parentAddress)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MAC_GET_PARENT_ADDRESS_IPC_COMMAND_ID,
-                        "vbu",
-                        parentAddress->addr.shortAddress,
-                        parentAddress->addr.longAddress,
-                        EUI64_SIZE,
-                        parentAddress->mode);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MAC_GET_PARENT_ADDRESS_IPC_COMMAND_ID,
+                                          "vbu",
+                                          parentAddress->addr.shortAddress,
+                                          parentAddress->addr.longAddress,
+                                          EUI64_SIZE,
+                                          parentAddress->mode);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
 
@@ -465,12 +465,12 @@ bool emberIsLocalEui64(EmberEUI64 eui64)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_IS_LOCAL_EUI64_IPC_COMMAND_ID,
-                        "b",
-                        eui64, EUI64_SIZE);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_IS_LOCAL_EUI64_IPC_COMMAND_ID,
+                                          "b",
+                                          eui64, EUI64_SIZE);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   bool localEui64;
   fetchApiParams(apiCommandData,
@@ -488,11 +488,11 @@ EmberNodeId emberGetNodeId(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_NODE_ID_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_NODE_ID_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberNodeId nodeId;
   fetchApiParams(apiCommandData,
@@ -510,11 +510,11 @@ EmberPanId emberGetPanId(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_PAN_ID_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_PAN_ID_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberPanId panId;
   fetchApiParams(apiCommandData,
@@ -532,11 +532,11 @@ EmberNodeId emberGetParentId(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_PARENT_ID_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_PARENT_ID_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberNodeId parentNodeId;
   fetchApiParams(apiCommandData,
@@ -554,11 +554,11 @@ EmberNodeType emberGetNodeType(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_NODE_TYPE_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_NODE_TYPE_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberNodeType nodeType;
   fetchApiParams(apiCommandData,
@@ -576,12 +576,12 @@ EmberStatus emberCalibrateCurrentChannelExtended(uint32_t calValueIn,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_CALIBRATE_CURRENT_CHANNEL_EXTENDED_IPC_COMMAND_ID,
-                        "w",
-                        calValueIn);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_CALIBRATE_CURRENT_CHANNEL_EXTENDED_IPC_COMMAND_ID,
+                                          "w",
+                                          calValueIn);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
 
@@ -598,12 +598,12 @@ EmberStatus emberApplyIrCalibration(uint32_t calValue)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_APPLY_IR_CALIBRATION_IPC_COMMAND_ID,
-                        "w",
-                        calValue);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_APPLY_IR_CALIBRATION_IPC_COMMAND_ID,
+                                          "w",
+                                          calValue);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -618,11 +618,11 @@ EmberStatus emberTempCalibration(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_TEMP_CALIBRATION_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_TEMP_CALIBRATION_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -637,11 +637,11 @@ EmberCalType emberGetCalType(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_CAL_TYPE_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_CAL_TYPE_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberCalType calType;
   fetchApiParams(apiCommandData,
@@ -659,15 +659,15 @@ uint8_t emberGetMaximumPayloadLength(EmberMacAddressMode srcAddressMode,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_MAXIMUM_PAYLOAD_LENGTH_IPC_COMMAND_ID,
-                        "uuuu",
-                        srcAddressMode,
-                        dstAddressMode,
-                        interpan,
-                        secured);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_MAXIMUM_PAYLOAD_LENGTH_IPC_COMMAND_ID,
+                                          "uuuu",
+                                          srcAddressMode,
+                                          dstAddressMode,
+                                          interpan,
+                                          secured);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   uint8_t payloadLength;
   fetchApiParams(apiCommandData,
@@ -682,12 +682,12 @@ EmberStatus emberSetIndirectQueueTimeout(uint32_t timeoutMs)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_INDIRECT_QUEUE_TIMEOUT_IPC_COMMAND_ID,
-                        "w",
-                        timeoutMs);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_INDIRECT_QUEUE_TIMEOUT_IPC_COMMAND_ID,
+                                          "w",
+                                          timeoutMs);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -707,18 +707,18 @@ EmberStatus emberMessageSend(EmberNodeId destination,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MESSAGE_SEND_IPC_COMMAND_ID,
-                        "vuuubu",
-                        destination,
-                        endpoint,
-                        messageTag,
-                        messageLength,
-                        message,
-                        messageLength,
-                        options);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MESSAGE_SEND_IPC_COMMAND_ID,
+                                          "vuuubu",
+                                          destination,
+                                          endpoint,
+                                          messageTag,
+                                          messageLength,
+                                          message,
+                                          messageLength,
+                                          options);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -733,11 +733,11 @@ EmberStatus emberPollForData(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_POLL_FOR_DATA_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_POLL_FOR_DATA_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -756,28 +756,28 @@ EmberStatus emberMacMessageSend(EmberMacFrame *macFrame,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MAC_MESSAGE_SEND_IPC_COMMAND_ID,
-                        "vbuvbuvvuuuubu",
-                        macFrame->srcAddress.addr.shortAddress,
-                        macFrame->srcAddress.addr.longAddress,
-                        EUI64_SIZE,
-                        macFrame->srcAddress.mode,
-                        macFrame->dstAddress.addr.shortAddress,
-                        macFrame->dstAddress.addr.longAddress,
-                        EUI64_SIZE,
-                        macFrame->dstAddress.mode,
-                        macFrame->srcPanId,
-                        macFrame->dstPanId,
-                        macFrame->srcPanIdSpecified,
-                        macFrame->dstPanIdSpecified,
-                        messageTag,
-                        messageLength,
-                        message,
-                        messageLength,
-                        options);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MAC_MESSAGE_SEND_IPC_COMMAND_ID,
+                                          "vbuvbuvvuuuubu",
+                                          macFrame->srcAddress.addr.shortAddress,
+                                          macFrame->srcAddress.addr.longAddress,
+                                          EUI64_SIZE,
+                                          macFrame->srcAddress.mode,
+                                          macFrame->dstAddress.addr.shortAddress,
+                                          macFrame->dstAddress.addr.longAddress,
+                                          EUI64_SIZE,
+                                          macFrame->dstAddress.mode,
+                                          macFrame->srcPanId,
+                                          macFrame->dstPanId,
+                                          macFrame->srcPanIdSpecified,
+                                          macFrame->dstPanIdSpecified,
+                                          messageTag,
+                                          messageLength,
+                                          message,
+                                          messageLength,
+                                          options);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -792,12 +792,12 @@ EmberStatus emberMacSetPanCoordinator(bool isCoordinator)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MAC_SET_PAN_COORDINATOR_IPC_COMMAND_ID,
-                        "u",
-                        isCoordinator);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MAC_SET_PAN_COORDINATOR_IPC_COMMAND_ID,
+                                          "u",
+                                          isCoordinator);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -812,15 +812,15 @@ EmberStatus emberSetPollDestinationAddress(EmberMacAddress *destination)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_POLL_DESTINATION_ADDRESS_IPC_COMMAND_ID,
-                        "vbu",
-                        destination->addr.shortAddress,
-                        destination->addr.longAddress,
-                        EUI64_SIZE,
-                        destination->mode);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_POLL_DESTINATION_ADDRESS_IPC_COMMAND_ID,
+                                          "vbu",
+                                          destination->addr.shortAddress,
+                                          destination->addr.longAddress,
+                                          EUI64_SIZE,
+                                          destination->mode);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -835,15 +835,15 @@ EmberStatus emberRemoveChild(EmberMacAddress *address)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_REMOVE_CHILD_IPC_COMMAND_ID,
-                        "vbu",
-                        address->addr.shortAddress,
-                        address->addr.longAddress,
-                        EUI64_SIZE,
-                        address->mode);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_REMOVE_CHILD_IPC_COMMAND_ID,
+                                          "vbu",
+                                          address->addr.shortAddress,
+                                          address->addr.longAddress,
+                                          EUI64_SIZE,
+                                          address->mode);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -859,15 +859,15 @@ EmberStatus emberGetChildFlags(EmberMacAddress *address,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_CHILD_FLAGS_IPC_COMMAND_ID,
-                        "vbu",
-                        address->addr.shortAddress,
-                        address->addr.longAddress,
-                        EUI64_SIZE,
-                        address->mode);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_CHILD_FLAGS_IPC_COMMAND_ID,
+                                          "vbu",
+                                          address->addr.shortAddress,
+                                          address->addr.longAddress,
+                                          EUI64_SIZE,
+                                          address->mode);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
 
@@ -886,15 +886,15 @@ EmberStatus emberGetChildInfo(EmberMacAddress *address,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_CHILD_INFO_IPC_COMMAND_ID,
-                        "vbu",
-                        address->addr.shortAddress,
-                        address->addr.longAddress,
-                        EUI64_SIZE,
-                        address->mode);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_CHILD_INFO_IPC_COMMAND_ID,
+                                          "vbu",
+                                          address->addr.shortAddress,
+                                          address->addr.longAddress,
+                                          EUI64_SIZE,
+                                          address->mode);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
 
@@ -918,11 +918,11 @@ EmberStatus emberPurgeIndirectMessages(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_PURGE_INDIRECT_MESSAGES_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_PURGE_INDIRECT_MESSAGES_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -938,13 +938,13 @@ EmberStatus emberMacAddShortToLongAddressMapping(EmberNodeId shortId,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MAC_ADD_SHORT_TO_LONG_ADDRESS_MAPPING_IPC_COMMAND_ID,
-                        "vb",
-                        shortId,
-                        longId, EUI64_SIZE);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MAC_ADD_SHORT_TO_LONG_ADDRESS_MAPPING_IPC_COMMAND_ID,
+                                          "vb",
+                                          shortId,
+                                          longId, EUI64_SIZE);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -959,11 +959,11 @@ EmberStatus emberMacClearShortToLongAddressMappings(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MAC_CLEAR_SHORT_TO_LONG_ADDRESS_MAPPINGS_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MAC_CLEAR_SHORT_TO_LONG_ADDRESS_MAPPINGS_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -978,11 +978,11 @@ EmberStatus emberNetworkLeave(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_NETWORK_LEAVE_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_NETWORK_LEAVE_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -997,11 +997,11 @@ EmberStatus emberNetworkInit(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_NETWORK_INIT_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_NETWORK_INIT_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1016,12 +1016,12 @@ EmberStatus emberStartActiveScan(uint16_t channel)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_START_ACTIVE_SCAN_IPC_COMMAND_ID,
-                        "v",
-                        channel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_START_ACTIVE_SCAN_IPC_COMMAND_ID,
+                                          "v",
+                                          channel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1037,13 +1037,13 @@ EmberStatus emberStartEnergyScan(uint16_t channel,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_START_ENERGY_SCAN_IPC_COMMAND_ID,
-                        "vu",
-                        channel,
-                        samples);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_START_ENERGY_SCAN_IPC_COMMAND_ID,
+                                          "vu",
+                                          channel,
+                                          samples);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1059,13 +1059,13 @@ EmberStatus emberSetApplicationBeaconPayload(uint8_t payloadLength,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_APPLICATION_BEACON_PAYLOAD_IPC_COMMAND_ID,
-                        "b",
-                        payload,
-                        payloadLength);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_APPLICATION_BEACON_PAYLOAD_IPC_COMMAND_ID,
+                                          "b",
+                                          payload,
+                                          payloadLength);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1081,13 +1081,13 @@ EmberStatus emberSetSelectiveJoinPayload(uint8_t payloadLength,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_SELECTIVE_JOIN_PAYLOAD_IPC_COMMAND_ID,
-                        "b",
-                        payload,
-                        payloadLength);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_SELECTIVE_JOIN_PAYLOAD_IPC_COMMAND_ID,
+                                          "b",
+                                          payload,
+                                          payloadLength);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1102,11 +1102,11 @@ EmberStatus emberClearSelectiveJoinPayload(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_CLEAR_SELECTIVE_JOIN_PAYLOAD_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_CLEAR_SELECTIVE_JOIN_PAYLOAD_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1121,14 +1121,14 @@ EmberStatus emberFormNetwork(EmberNetworkParameters *parameters)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_FORM_NETWORK_IPC_COMMAND_ID,
-                        "vvv",
-                        parameters->panId,
-                        parameters->radioTxPower,
-                        parameters->radioChannel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_FORM_NETWORK_IPC_COMMAND_ID,
+                                          "vvv",
+                                          parameters->panId,
+                                          parameters->radioTxPower,
+                                          parameters->radioChannel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1145,16 +1145,16 @@ EmberStatus emberJoinNetworkExtended(EmberNodeType nodeType,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_JOIN_NETWORK_EXTENDED_IPC_COMMAND_ID,
-                        "uvvvv",
-                        nodeType,
-                        nodeId,
-                        parameters->panId,
-                        parameters->radioTxPower,
-                        parameters->radioChannel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_JOIN_NETWORK_EXTENDED_IPC_COMMAND_ID,
+                                          "uvvvv",
+                                          nodeType,
+                                          nodeId,
+                                          parameters->panId,
+                                          parameters->radioTxPower,
+                                          parameters->radioChannel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1171,15 +1171,15 @@ EmberStatus emberJoinNetwork(EmberNodeType nodeType,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_JOIN_NETWORK_IPC_COMMAND_ID,
-                        "uvvv",
-                        nodeType,
-                        parameters->panId,
-                        parameters->radioTxPower,
-                        parameters->radioChannel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_JOIN_NETWORK_IPC_COMMAND_ID,
+                                          "uvvv",
+                                          nodeType,
+                                          parameters->panId,
+                                          parameters->radioTxPower,
+                                          parameters->radioChannel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1197,14 +1197,14 @@ EmberStatus emberMacFormNetwork(EmberNetworkParameters *parameters)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_MAC_FORM_NETWORK_IPC_COMMAND_ID,
-                        "vvv",
-                        parameters->panId,
-                        parameters->radioTxPower,
-                        parameters->radioChannel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_MAC_FORM_NETWORK_IPC_COMMAND_ID,
+                                          "vvv",
+                                          parameters->panId,
+                                          parameters->radioTxPower,
+                                          parameters->radioChannel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1221,12 +1221,12 @@ EmberStatus emberPermitJoining(uint8_t duration)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_PERMIT_JOINING_IPC_COMMAND_ID,
-                        "u",
-                        duration);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_PERMIT_JOINING_IPC_COMMAND_ID,
+                                          "u",
+                                          duration);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1243,16 +1243,16 @@ EmberStatus emberJoinCommissioned(EmberNodeType nodeType,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_JOIN_COMMISSIONED_IPC_COMMAND_ID,
-                        "uvvvv",
-                        nodeType,
-                        nodeId,
-                        parameters->panId,
-                        parameters->radioTxPower,
-                        parameters->radioChannel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_JOIN_COMMISSIONED_IPC_COMMAND_ID,
+                                          "uvvvv",
+                                          nodeType,
+                                          nodeId,
+                                          parameters->panId,
+                                          parameters->radioTxPower,
+                                          parameters->radioChannel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1267,11 +1267,11 @@ void emberResetNetworkState(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_RESET_NETWORK_STATE_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_RESET_NETWORK_STATE_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
   releaseCommandMutex();
 }
 
@@ -1281,13 +1281,13 @@ EmberStatus emberFrequencyHoppingSetChannelMask(uint8_t channelMaskLength,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_FREQUENCY_HOPPING_SET_CHANNEL_MASK_IPC_COMMAND_ID,
-                        "b",
-                        channelMask,
-                        channelMaskLength);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_FREQUENCY_HOPPING_SET_CHANNEL_MASK_IPC_COMMAND_ID,
+                                          "b",
+                                          channelMask,
+                                          channelMaskLength);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1302,11 +1302,11 @@ EmberStatus emberFrequencyHoppingStartServer(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_FREQUENCY_HOPPING_START_SERVER_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_FREQUENCY_HOPPING_START_SERVER_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1322,13 +1322,13 @@ EmberStatus emberFrequencyHoppingStartClient(EmberNodeId serverNodeId,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_FREQUENCY_HOPPING_START_CLIENT_IPC_COMMAND_ID,
-                        "vv",
-                        serverNodeId,
-                        serverPanId);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_FREQUENCY_HOPPING_START_CLIENT_IPC_COMMAND_ID,
+                                          "vv",
+                                          serverNodeId,
+                                          serverPanId);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1343,11 +1343,11 @@ EmberStatus emberFrequencyHoppingStop(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_FREQUENCY_HOPPING_STOP_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_FREQUENCY_HOPPING_STOP_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1363,13 +1363,13 @@ EmberStatus emberSetAuxiliaryAddressFilteringEntry(EmberNodeId nodeId,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_AUXILIARY_ADDRESS_FILTERING_ENTRY_IPC_COMMAND_ID,
-                        "vu",
-                        nodeId,
-                        entryIndex);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_AUXILIARY_ADDRESS_FILTERING_ENTRY_IPC_COMMAND_ID,
+                                          "vu",
+                                          nodeId,
+                                          entryIndex);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1384,12 +1384,12 @@ EmberNodeId emberGetAuxiliaryAddressFilteringEntry(uint8_t entryIndex)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_AUXILIARY_ADDRESS_FILTERING_ENTRY_IPC_COMMAND_ID,
-                        "u",
-                        entryIndex);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_AUXILIARY_ADDRESS_FILTERING_ENTRY_IPC_COMMAND_ID,
+                                          "u",
+                                          entryIndex);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberNodeId nodeId;
   fetchApiParams(apiCommandData,
@@ -1405,13 +1405,13 @@ EmberStatus emberStartTxStream(EmberTxStreamParameters parameters,
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_START_TX_STREAM_IPC_COMMAND_ID,
-                        "uv",
-                        parameters,
-                        channel);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_START_TX_STREAM_IPC_COMMAND_ID,
+                                          "uv",
+                                          parameters,
+                                          channel);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1426,11 +1426,11 @@ EmberStatus emberStopTxStream(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_STOP_TX_STREAM_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_STOP_TX_STREAM_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1445,12 +1445,12 @@ EmberStatus emberSetActiveScanDuration(uint16_t durationMs)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_SET_ACTIVE_SCAN_DURATION_IPC_COMMAND_ID,
-                        "v",
-                        durationMs);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_ACTIVE_SCAN_DURATION_IPC_COMMAND_ID,
+                                          "v",
+                                          durationMs);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   EmberStatus status;
   fetchApiParams(apiCommandData,
@@ -1465,11 +1465,11 @@ uint16_t emberGetActiveScanDuration(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_ACTIVE_SCAN_DURATION_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_ACTIVE_SCAN_DURATION_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   uint16_t durationMs;
   fetchApiParams(apiCommandData,
@@ -1484,11 +1484,11 @@ uint16_t emberGetDefaultChannel(void)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
-  formatResponseCommand(apiCommandBuffer,
-                        MAX_STACK_API_COMMAND_SIZE,
-                        EMBER_GET_DEFAULT_CHANNEL_IPC_COMMAND_ID,
-                        "");
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer);
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_DEFAULT_CHANNEL_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
   uint16_t firstChannel;
   fetchApiParams(apiCommandData,

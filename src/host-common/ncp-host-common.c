@@ -27,17 +27,12 @@
 static uint8_t apiCommandData[MAX_STACK_API_COMMAND_SIZE];
 static pthread_mutex_t lock;
 
-uint8_t *sendBlockingCommand(uint8_t *apiCommandBuffer)
+uint8_t *sendBlockingCommand(uint8_t *apiCommandBuffer, uint16_t length)
 {
-  cpc_tx(apiCommandBuffer, MAX_STACK_API_COMMAND_SIZE);
+  cpc_tx(apiCommandBuffer, length);
   uint8_t *resp_buffer = wait_for_response();
   memcpy(apiCommandData, resp_buffer, MAX_STACK_API_COMMAND_SIZE);
   return apiCommandData;
-}
-
-void sendResponse(uint8_t *apiCommandBuffer)
-{
-  cpc_tx(apiCommandBuffer, MAX_STACK_API_COMMAND_SIZE);
 }
 
 void sendCallbackCommand(uint8_t *callbackCommandBuffer, uint16_t commandLength)

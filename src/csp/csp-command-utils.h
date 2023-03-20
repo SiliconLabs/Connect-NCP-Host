@@ -20,9 +20,7 @@
 //------------------------------------------------------------------------------
 // Functions to implement in RTOS or NCP files
 
-uint8_t *sendBlockingCommand(uint8_t *apiCommandBuffer);
-
-void sendResponse(uint8_t *apiCommandBuffer);
+uint8_t *sendBlockingCommand(uint8_t *apiCommandBuffer, uint16_t commandLength);
 
 uint8_t *getApiCommandPointer();
 
