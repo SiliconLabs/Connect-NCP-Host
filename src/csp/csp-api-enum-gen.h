@@ -34,6 +34,7 @@ enum {
   EMBER_GET_SECURITY_KEY_IPC_COMMAND_ID                                = VNCP_CMD_ID + 0x4F,
   EMBER_SET_PSA_SECURITY_KEY_IPC_COMMAND_ID                            = VNCP_CMD_ID + 0x4C,
   EMBER_REMOVE_PSA_SECURITY_KEY_IPC_COMMAND_ID                         = VNCP_CMD_ID + 0x4D,
+  EMBER_SET_NCP_SECURITY_KEY_IPC_COMMAND_ID                            = VNCP_CMD_ID + 0x4E,
   EMBER_GET_COUNTER_IPC_COMMAND_ID                                     = VNCP_CMD_ID + 0x05,
   EMBER_SET_RADIO_CHANNEL_EXTENDED_IPC_COMMAND_ID                      = VNCP_CMD_ID + 0x4B,
   EMBER_SET_RADIO_CHANNEL_IPC_COMMAND_ID                               = VNCP_CMD_ID + 0x06,

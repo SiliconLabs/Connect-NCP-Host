@@ -158,6 +158,31 @@ EmberStatus emberRemovePsaSecurityKey(void)
 
 #endif
 
+#ifdef SL_CATALOG_CONNECT_AES_SECURITY_PRESENT
+// setNcpSecurityKey
+EmberStatus emberSetNcpSecurityKey(uint8_t *key,
+                                   uint8_t keyLength)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_NCP_SECURITY_KEY_IPC_COMMAND_ID,
+                                          "b",
+                                          key,
+                                          keyLength);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  EmberStatus status;
+  fetchApiParams(apiCommandData,
+                 "u",
+                 &status);
+  releaseCommandMutex();
+  return status;
+}
+
+#endif
+
 // getCounter
 EmberStatus emberGetCounter(EmberCounterType counterType,
                             uint32_t* count)
