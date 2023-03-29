@@ -38,6 +38,7 @@ check_include_file(sl_cpc.h LIBCPC_FOUND)
 
 add_definitions(-DUNIX_HOST
                 -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
+                -DSL_CATALOG_CONNECT_OTA_UNICAST_BOOTLOADER_SERVER_PRESENT
                 )
                 
 add_library(connecthost
@@ -52,7 +53,9 @@ add_library(connecthost
             src/host-common/callback-queue.c
             src/host-common/lib-init.c
             src/log/log.c
-            src/log/backtrace_show.c)
+            src/log/backtrace_show.c
+            src/ota-unicast-bootloader/ota-unicast-bootloader-server/ota-unicast-bootloader-server.c
+            src/ota-unicast-bootloader/ota-unicast-bootloader-server/ota-unicast-bootloader-server-cb.c)
 
 set_target_properties(connecthost PROPERTIES VERSION ${PROJECT_VERSION})
             
@@ -76,7 +79,10 @@ set_property(TARGET connecthost PROPERTY
             connect/network-management.h
             connect/radio-stream.h
             connect/stack-info.h
-            connect/version.h)
+            connect/version.h
+            connect/ota-unicast-bootloader-server.h
+            connect/ota-unicast-bootloader-protocol.h
+            connect/ota-unicast-bootloader-types.h)
 
 target_link_libraries(connecthost PRIVATE cpc)
 
