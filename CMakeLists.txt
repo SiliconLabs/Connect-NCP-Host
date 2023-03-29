@@ -6,7 +6,7 @@ include(CheckIncludeFile)
 check_include_file(sl_cpc.h LIBCPC_FOUND)
 
 add_definitions(-DUNIX_HOST
-                # -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
+                -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
                 )
 
 add_library(connect-host-lib
