@@ -175,6 +175,15 @@ bool emberAfStackIdleCallback(uint32_t *idleTimeMs);
  */
 bool emberAfCommonOkToEnterLowPowerCallback(bool enter_em2,
                                             uint32_t duration_ms);
+
+void emAfPluginOtaUnicastBootloaderServerIncomingMessageCallback(
+  EmberIncomingMessage *message
+  );
+
+void emAfPluginOtaUnicastBootloaderServerMessageSentCallback(
+  EmberStatus status,
+  EmberOutgoingMessage *message
+  );
 /**
  * @}
  *

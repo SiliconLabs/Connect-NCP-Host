@@ -31,8 +31,10 @@ __attribute__ ((weak)) void emberAfStackIsr(void)
 __attribute__ ((weak)) void emberAfMessageSent(EmberStatus status,
                                                EmberOutgoingMessage *message)
 {
-  (void)status;
-  (void)message;
+  emAfPluginOtaUnicastBootloaderServerMessageSentCallback(
+    status,
+    message
+    );
 }
 
 __attribute__ ((weak)) void emberAfMacMessageSent(EmberStatus status,
@@ -44,7 +46,7 @@ __attribute__ ((weak)) void emberAfMacMessageSent(EmberStatus status,
 
 __attribute__ ((weak)) void emberAfIncomingMessage(EmberIncomingMessage *message)
 {
-  (void)message;
+  emAfPluginOtaUnicastBootloaderServerIncomingMessageCallback(message);
 }
 
 __attribute__ ((weak)) void emberAfIncomingMacMessage(EmberIncomingMacMessage *message)
