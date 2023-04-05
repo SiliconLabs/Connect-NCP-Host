@@ -34,6 +34,7 @@ set_property(TARGET connect-host-lib PROPERTY
             connect/ember.h
             connect/byte-utilities.h
             connect/callback_dispatcher.h
+            connect/crypto-types.h
             connect/ember-types.h
             connect/error-def.h
             connect/error.h

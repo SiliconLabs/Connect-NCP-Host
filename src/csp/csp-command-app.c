@@ -117,21 +117,8 @@ EmberStatus emberGetSecurityKey(EmberKeyData *key)
 // setPsaSecurityKey
 EmberStatus emberSetPsaSecurityKey(mbedtls_svc_key_id_t key_id)
 {
-  acquireCommandMutex();
-  uint8_t *apiCommandBuffer = getApiCommandPointer();
-  uint16_t length = formatResponseCommand(apiCommandBuffer,
-                                          MAX_STACK_API_COMMAND_SIZE,
-                                          EMBER_SET_PSA_SECURITY_KEY_IPC_COMMAND_ID,
-                                          "w",
-                                          key_id);
-  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
-
-  EmberStatus status;
-  fetchApiParams(apiCommandData,
-                 "u",
-                 &status);
-  releaseCommandMutex();
-  return status;
+  #warning emberSetPsaSecurityKey is not supported, use emberSetNcpSecurityKey instead to set a security key
+  return EMBER_INVALID_CALL;
 }
 
 #endif

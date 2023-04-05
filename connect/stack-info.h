@@ -25,9 +25,13 @@
  *    misrepresented as being the original software.
  * 3. This notice may not be removed or altered from any source distribution.
  *
- ******************************************************************************
+ ******************************************************************************/
 
-   /**
+ #ifdef SL_CATALOG_CONNECT_AES_SECURITY_PRESENT
+ #include <connect/crypto-types.h>
+ #endif
+
+/**
  * @addtogroup stack_info
  * @brief Connect API for accessing and modifying stack states and behaviors.
  *
