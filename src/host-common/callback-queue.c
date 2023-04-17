@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <poll.h>
-#include "include/lib-connect-ncp.h"
+#include "connect/ncp.h"
 #include "csp/csp-format.h"
 #include "callback-queue.h"
 #include "csp/csp-command-utils.h"

@@ -14,7 +14,7 @@
  *
  ******************************************************************************/
 
-#include "stack/include/ember.h"
+#include "connect/ember.h"
 #include <assert.h>
 #include <string.h>
 

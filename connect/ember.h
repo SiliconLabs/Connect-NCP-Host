@@ -32,12 +32,12 @@
 #ifndef __EMBER_H__
 #define __EMBER_H__
 
-#include "ember-types.h"
-#include "error.h"
-#include "network-management.h"
-#include "stack-info.h"
-#include "message.h"
-#include "byte-utilities.h"
-#include "radio-stream.h"
+#include "connect/ember-types.h"
+#include "connect/error.h"
+#include "connect/network-management.h"
+#include "connect/stack-info.h"
+#include "connect/message.h"
+#include "connect/byte-utilities.h"
+#include "connect/radio-stream.h"
 
 #endif // __EMBER_H__

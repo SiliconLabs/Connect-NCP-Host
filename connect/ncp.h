@@ -25,7 +25,7 @@ extern "C" {
 // Stack specific types, call-able APIs and config
 //------------------------------------------------------------------------------
 
-#include "../stack/include/ember.h"
+#include "connect/ember.h"
 
 //------------------------------------------------------------------------------
 // Connect Host library API

@@ -38,8 +38,8 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <assert.h>
-#include "include/lib-connect-ncp.h"
-#include "stack/include/ember.h"
+#include <connect/ncp.h>
+#include <connect/ember.h>
 
 // -----------------------------------------------------------------------------
 //                              Macros and Typedefs

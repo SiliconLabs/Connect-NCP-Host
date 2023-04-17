@@ -34,10 +34,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "stack/include/error-def.h"
-#include "stack/include/ember-types.h"
-#include "include/lib-connect-ncp.h"
-#include "stack/framework/callback_dispatcher.h"
+#include <connect/error-def.h>
+#include <connect/ember-types.h>
+#include <connect/ncp.h>
+#include <connect/callback_dispatcher.h>
 #include <string.h>
 #include <assert.h>
 #include "app_common.h"

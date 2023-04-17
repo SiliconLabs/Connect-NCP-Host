@@ -23,7 +23,7 @@
 #include <cli/boostasioscheduler.h>
 #include <cli/boostasioremotecli.h>
 
-#include "include/lib-connect-ncp.h"
+#include <connect/ncp.h>
 #include "cli_commands.h"
 
 #include "app_init.h"

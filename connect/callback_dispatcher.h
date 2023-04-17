@@ -1,4 +1,11 @@
-#include "stack/include/ember.h"
+#include "connect/ember.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef __CALLBACK_DISPATCHER_H__
+#define __CALLBACK_DISPATCHER_H__
 
 // Init
 void emberAfInit(void);
@@ -173,3 +180,9 @@ bool emberAfCommonOkToEnterLowPowerCallback(bool enter_em2,
  *
  * @}
  */
+
+#endif
+
+#ifdef __cplusplus
+}
+#endif

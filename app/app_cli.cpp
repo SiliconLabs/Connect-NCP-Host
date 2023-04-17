@@ -31,9 +31,9 @@
 #include <cli/cli.h>
 #include <cstring>
 
-#include "stack/include/error-def.h"
-#include "stack/include/ember-types.h"
-#include "include/lib-connect-ncp.h"
+#include <connect/error-def.h>
+#include <connect/ember-types.h>
+#include <connect/ncp.h>
 
 #include "app_cli.h"
 #include "app_common.h"
@@ -91,7 +91,6 @@ unsigned int splitStringIntoHexArray(std::string str, uint8_t *array)
  * CLI - form command
  * Form a network on the specified channel.
  *****************************************************************************/
-
 void cli_form(std::ostream&, uint16_t radioChannel)
 {
   EmberStatus status;
@@ -215,14 +214,14 @@ void cli_info(std::ostream&)
   printf("  Network state: 0x%02X\n", emberNetworkState());
   printf("      Node type: 0x%02X\n", emberGetNodeType());
   printf("          eui64: >%x%x%x%x%x%x%x%x\n",
-               eui64[7],
-               eui64[6],
-               eui64[5],
-               eui64[4],
-               eui64[3],
-               eui64[2],
-               eui64[1],
-               eui64[0]);
+         eui64[7],
+         eui64[6],
+         eui64[5],
+         eui64[4],
+         eui64[3],
+         eui64[2],
+         eui64[1],
+         eui64[0]);
   printf("        Node id: 0x%04X\n", emberGetNodeId());
   printf("   Node long id: 0x");
   for (uint8_t i = 0; i < EUI64_SIZE; i++) {
@@ -236,7 +235,6 @@ void cli_info(std::ostream&)
          is_ack,
          is_security,
          is_high_prio);
-
 }
 
 /******************************************************************************
@@ -292,7 +290,6 @@ void cli_set_channel(std::ostream&, uint16_t radioChannel)
   }
 }
 
-
 /******************************************************************************
  * CLI - start_energy_scan command
  * The command scans the energy level on the given channel, e.g.
@@ -337,7 +334,6 @@ void cli_counter(std::ostream&, uint8_t counterType)
     printf("Get counter failed, status=0x%02X\n", status);
   }
 }
-
 
 void reset_network_command(std::ostream&)
 {

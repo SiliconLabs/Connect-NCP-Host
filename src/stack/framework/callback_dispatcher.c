@@ -1,4 +1,4 @@
-#include "callback_dispatcher.h"
+#include "connect/callback_dispatcher.h"
 
 __attribute__ ((weak)) void emberAfInit(void)
 {

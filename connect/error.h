@@ -32,7 +32,7 @@
 #ifndef __ERRORS_H__
 #define __ERRORS_H__
 
-#include "error-def.h"
+#include "connect/error-def.h"
 
 /**
  * @brief  Return type for Ember functions.

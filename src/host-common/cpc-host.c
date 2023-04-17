@@ -25,8 +25,8 @@
 #include "csp/csp-format.h"
 #include "csp/csp-api-enum-gen.h"
 #include "csp/csp-command-utils.h"
-#include "stack/include/byte-utilities.h"
-#include "include/lib-connect-ncp.h"
+#include "connect/byte-utilities.h"
+#include "connect/ncp.h"
 #include "callback-queue.h"
 
 static cpc_handle_t lib_handle;
