@@ -1,35 +1,35 @@
 #include "connect/callback_dispatcher.h"
 
-__attribute__ ((weak)) void emberAfInit(void)
+void emberAfInit(void)
 {
 }
 
-__attribute__ ((weak)) void emberAfTick(void)
+void emberAfTick(void)
 {
 }
 
-__attribute__ ((weak)) void emberAfStackStatus(EmberStatus status)
+void emberAfStackStatus(EmberStatus status)
 {
   (void)status;
 }
 
-__attribute__ ((weak)) void emberAfChildJoin(EmberNodeType nodeType,
-                                             EmberNodeId nodeId)
+void emberAfChildJoin(EmberNodeType nodeType,
+                      EmberNodeId nodeId)
 {
   (void)nodeType;
   (void)nodeId;
 }
 
-__attribute__ ((weak)) void emberAfRadioNeedsCalibrating(void)
+void emberAfRadioNeedsCalibrating(void)
 {
 }
 
-__attribute__ ((weak)) void emberAfStackIsr(void)
+void emberAfStackIsr(void)
 {
 }
 
-__attribute__ ((weak)) void emberAfMessageSent(EmberStatus status,
-                                               EmberOutgoingMessage *message)
+void emberAfMessageSent(EmberStatus status,
+                        EmberOutgoingMessage *message)
 {
   emAfPluginOtaUnicastBootloaderServerMessageSentCallback(
     status,
@@ -37,31 +37,31 @@ __attribute__ ((weak)) void emberAfMessageSent(EmberStatus status,
     );
 }
 
-__attribute__ ((weak)) void emberAfMacMessageSent(EmberStatus status,
-                                                  EmberOutgoingMacMessage *message)
+void emberAfMacMessageSent(EmberStatus status,
+                           EmberOutgoingMacMessage *message)
 {
   (void)status;
   (void)message;
 }
 
-__attribute__ ((weak)) void emberAfIncomingMessage(EmberIncomingMessage *message)
+void emberAfIncomingMessage(EmberIncomingMessage *message)
 {
   emAfPluginOtaUnicastBootloaderServerIncomingMessageCallback(message);
 }
 
-__attribute__ ((weak)) void emberAfIncomingMacMessage(EmberIncomingMacMessage *message)
+void emberAfIncomingMacMessage(EmberIncomingMacMessage *message)
 {
   (void)message;
 }
 
-__attribute__ ((weak)) void emberAfIncomingBeacon(EmberPanId panId,
-                                                  EmberMacAddress *source,
-                                                  int8_t rssi,
-                                                  bool permitJoining,
-                                                  uint8_t beaconFieldsLength,
-                                                  uint8_t *beaconFields,
-                                                  uint8_t beaconPayloadLength,
-                                                  uint8_t *beaconPayload)
+void emberAfIncomingBeacon(EmberPanId panId,
+                           EmberMacAddress *source,
+                           int8_t rssi,
+                           bool permitJoining,
+                           uint8_t beaconFieldsLength,
+                           uint8_t *beaconFields,
+                           uint8_t beaconPayloadLength,
+                           uint8_t *beaconPayload)
 {
   (void)panId;
   (void)source;
@@ -73,14 +73,14 @@ __attribute__ ((weak)) void emberAfIncomingBeacon(EmberPanId panId,
   (void)beaconPayload;
 }
 
-__attribute__ ((weak)) void emberAfActiveScanComplete(void)
+void emberAfActiveScanComplete(void)
 {
 }
 
-__attribute__ ((weak)) void emberAfEnergyScanComplete(int8_t mean,
-                                                      int8_t min,
-                                                      int8_t max,
-                                                      uint16_t variance)
+void emberAfEnergyScanComplete(int8_t mean,
+                               int8_t min,
+                               int8_t max,
+                               uint16_t variance)
 {
   (void)mean;
   (void)min;
@@ -88,11 +88,11 @@ __attribute__ ((weak)) void emberAfEnergyScanComplete(int8_t mean,
   (void)variance;
 }
 
-__attribute__ ((weak)) void emberAfMarkApplicationBuffers(void)
+void emberAfMarkApplicationBuffers(void)
 {
 }
 
-__attribute__ ((weak)) void emberAfFrequencyHoppingStartClientComplete(EmberStatus status)
+void emberAfFrequencyHoppingStartClientComplete(EmberStatus status)
 {
   (void)status;
 }
