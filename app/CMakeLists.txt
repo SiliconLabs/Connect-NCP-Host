@@ -49,5 +49,5 @@ target_include_directories(host_sink_app PUBLIC
                )
 
 # External libraries
-target_link_libraries(host_sink_app PUBLIC connect-host-lib)
+target_link_libraries(host_sink_app PUBLIC connecthost)
 target_link_libraries(host_sink_app PRIVATE cli::cli)
