@@ -76,8 +76,12 @@ void load_cli_commands(std::unique_ptr<cli::Menu>& rootMenu)
   rootMenu->Insert(
     "set_security_key",
     cli_set_security_key,
-    "Set security key. Currently unavailable.\n \
+    "Set security key. \n \
        <key>:             16-byte hey security key e.g. {AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA}");
+  rootMenu->Insert(
+    "unset_security_key",
+    cli_unset_security_key,
+    "Unset any security key in effect.");
   rootMenu->Insert(
     "counter",
     cli_counter,
@@ -87,4 +91,31 @@ void load_cli_commands(std::unique_ptr<cli::Menu>& rootMenu)
     "reset_network",
     reset_network_command,
     "Resets the network on the NCP");
+  rootMenu->Insert(
+    "bootloader_unicast_set_target",
+    cli_bootloader_unicast_set_target,
+    "Set the target node address OTA Unicast Image transmission\n \
+       <target ID>        16-bit node ID of the node which should receive the image");
+  rootMenu->Insert(
+    "bootloader_unicast_distribute",
+    cli_bootloader_unicast_distribute,
+    "Initiates the OTA Unicast Image transmission for the target and tag selected\n \
+       <image size>       Length of the GBL image transmitted in bytes\n \
+       <image tag>        8-bit identifier of the image transmitted. The client must agree in the tag to accept the image.");
+  rootMenu->Insert(
+    "bootloader_unicast_request_bootload",
+    cli_bootloader_unicast_request_bootload,
+    "Requests the target node to bootload the image transmitted and reboot the node running the updated image.\n \
+       <delay>            The client is expected to schedule the firmware update after this many milliseconds\n \
+       <image tag>        8-bit identifier of the image transmitted. The client must agree in the tag to bootload.");
+  rootMenu->Insert(
+    "bootloader_set_tag",
+    cli_bootloader_set_tag,
+    "Sets the 8-bit image identifier (tag) that will be associated with the stored image.\n \
+       <image tag>        8-bit identifier of the image transmitted.");
+  rootMenu->Insert(
+    "load_gbl_file",
+    cli_load_gbl_file,
+    "Loads the selected GBL file from disk to RAM for transmitting it later to the target node.\n \
+       <filename>         Name of the GBL file to load.");
 }

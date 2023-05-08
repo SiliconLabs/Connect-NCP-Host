@@ -28,6 +28,7 @@
 
 #include "app_init.h"
 #include "app_cli.h"
+#include "app_common.h"
 
 namespace cli
 {
@@ -53,6 +54,8 @@ int main()
     // global exit action
     cli.ExitAction([](auto& out){
       out << "Exiting.\n";
+      // Discard any previous image
+      free_gbl_image();
     });
     // std exception custom handler
     cli.StdExceptionHandler(
@@ -73,6 +76,8 @@ int main()
       [&scheduler](auto& out)   // session exit action
     {
       out << "Closing App...\n";
+      // Discard any previous image
+      free_gbl_image();
       scheduler.Stop();
     }
       );

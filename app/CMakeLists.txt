@@ -21,7 +21,7 @@ if(CC_HAVE_WNO_STRINGOP_OVERFLOW)
 endif()
 
 add_definitions(-DUNIX_HOST
-                # -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
+                -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
                 )
 
 # Source files and executable
@@ -48,6 +48,7 @@ target_include_directories(host_sink_app PUBLIC
                ${CMAKE_CURRENT_SOURCE_DIR}
                ./
                config
+               inc
                )
 
 # External libraries

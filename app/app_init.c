@@ -40,6 +40,9 @@
 #include <assert.h>
 #include <connect/ncp.h>
 #include <connect/ember.h>
+#include <connect/ember-types.h>
+#include <connect/stack-info.h>
+#include "app_common.h"
 
 // -----------------------------------------------------------------------------
 //                              Macros and Typedefs
@@ -99,7 +102,15 @@ void emberAfInitCallback(void)
 {
   EmberStatus em_status = EMBER_ERR_FATAL;
   // CLI info message
-  printf("Connect Host Sink Appl");
+  printf("Connect Host Sink App");
+  // Set the default security key
+  em_status = emberSetNcpSecurityKey(&default_security_key.contents,
+                                     EMBER_ENCRYPTION_KEY_SIZE);
+  if (em_status != EMBER_SUCCESS) {
+    printf("Security key setup status 0x%02X\n", em_status);
+  }
+  // Start up the Connect network
+  printf("Connect Host Sink App");
   em_status = emberNetworkInit();
   printf("Network status 0x%02X\n", em_status);
 }

@@ -69,11 +69,30 @@ start_energy_scan                               Scan the energy level on the giv
 <channel>                                       Valid channel number on the PHY
 <sample count>                                  Number of samples
 
-set_security_key                                Set security key. Currently unavailable.
+set_security_key                                Set security key.
 <key>                                           16-byte hey security key e.g. {AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA}
+
+unset_security_key                              Unset any security key in effect.
 
 counter                                         Print out the passed stack counter
 <counter number>                                Internal counter ID to show
 
 reset_network                                   Resets the network on the NCP
+
+bootloader_unicast_set_target                   Set the target node address OTA Unicast Image transmission
+<target ID>                                     16-bit node ID of the node which should receive the image
+
+bootloader_unicast_distribute                   Initiates the OTA Unicast Image transmission for the target and tag selected
+<image size>                                    Length of the GBL image transmitted in bytes
+<image tag>                                     8-bit identifier of the image transmitted. The client must agree in the tag to accept the image.
+
+bootloader_unicast_request_bootload             Requests the target node to bootload the image transmitted and reboot the node running the updated image.
+<delay>                                         The client is expected to schedule the firmware update after this many milliseconds
+<image tag>                                     8-bit identifier of the image transmitted. The client must agree in the tag to bootload.
+
+bootloader_set_tag                              Sets the 8-bit image identifier (tag) that will be associated with the stored image.
+<image tag>                                     8-bit identifier of the image transmitted.
+
+load_gbl_file                                   Loads the selected GBL file from disk to RAM for transmitting it later to the target ode.
+<filename>                                      Name of the GBL file to load.
 ```

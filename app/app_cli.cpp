@@ -34,9 +34,13 @@
 #include <connect/error-def.h>
 #include <connect/ember-types.h>
 #include <connect/ncp.h>
+#include <connect/stack-info.h>
 
 #include "app_cli.h"
 #include "app_common.h"
+
+#include <connect/ota-unicast-bootloader-server.h>
+#include "sl_connect_sdk_ota_bootloader_test_common.h"
 
 // -----------------------------------------------------------------------------
 //                              Macros and Typedefs
@@ -54,35 +58,29 @@
 /// Sink TX power set by CLI command
 static int16_t tx_power = SL_SENSOR_SINK_TX_POWER;
 
-/// Connect security key (default)
-EmberKeyData security_key = { .contents = SL_SENSOR_SINK_SECURITY_KEY };
+/// Node ID of the target
+static EmberNodeId target;
 
-long hexToInt(std::string hex)
-{
-  if (hex[0] == '0' && (hex[1] == 'x' || hex[1] == 'X')) {
-    hex.erase(0, 2); //remove 0x header for strtol
-  }
-  char *p;
-  long n = strtol(hex.c_str(), &p, 16);
-  if ( *p != 0 ) {
-    printf("\nBad argument, enter a hex value");
-    return 0;
-  }
-  return n;
-}
+// -----------------------------------------------------------------------------
+//                          Static Function Declarations
+// -----------------------------------------------------------------------------
 
-unsigned int splitStringIntoHexArray(std::string str, uint8_t *array)
-{
-  if (str[0] == '{') { // remove '{' '}' delimiters
-    str.erase(0, 1);
-    str.pop_back();
-  }
-  for (unsigned int i = 0; i < str.length(); i += 2) {
-    std::string s = std::string() + str[i] + str[i + 1];
-    array[i / 2] = hexToInt(s) & 0xFF;
-  }
-  return(str.length() / 2);
-}
+/******************************************************************************
+* Convert hex string parameter to binary
+******************************************************************************/
+static long hexToInt(std::string hex);
+
+/******************************************************************************
+* Convert hex byte string like e.g. "{012345}" to array { 0x01, 0x23, 0x45 }
+******************************************************************************/
+static unsigned int splitStringIntoHexArray(std::string str, uint8_t *array);
+
+/**************************************************************************//**
+ * Function to read the GBL file from the file system of the host file system.
+ *****************************************************************************/
+static EmberStatus read_gbl_file(std::string filename,
+                                 uint8_t** gbl_image,
+                                 uint32_t* gbl_size);
 
 // -----------------------------------------------------------------------------
 //                          Public Function Definitions
@@ -315,8 +313,34 @@ void cli_start_energy_scan(std::ostream&,
  *****************************************************************************/
 void cli_set_security_key(std::ostream&, std::string keyContents)
 {
-  (void)keyContents;
-  printf("This version of the Host NCP library does not support security.\n");
+  EmberStatus status;
+  uint8_t key_length;
+  uint8_t key[EMBER_ENCRYPTION_KEY_SIZE];
+
+  key_length = splitStringIntoHexArray(keyContents, key);
+  if (key_length != EMBER_ENCRYPTION_KEY_SIZE) {
+    printf("Security key length must be: %d bytes\n", EMBER_ENCRYPTION_KEY_SIZE);
+    return;
+  }
+
+  status = emberSetNcpSecurityKey(key,
+                                  EMBER_ENCRYPTION_KEY_SIZE);
+  if (status != EMBER_SUCCESS) {
+    printf("Security key set failed, status=0x%02X", status);
+  } else {
+    printf("Security key set successful.\n");
+  }
+}
+
+
+/******************************************************************************
+ * CLI - set_security_key command
+ * The command unsets any security key in effect.
+ *****************************************************************************/
+void cli_unset_security_key(std::ostream&)
+{
+  emberRemovePsaSecurityKey();
+  printf("Security key unset successful\n");
 }
 
 /******************************************************************************
@@ -339,4 +363,178 @@ void reset_network_command(std::ostream&)
 {
   printf("Resetting the network...");
   emberResetNetworkState();
+}
+
+/**************************************************************************//**
+ * CLI - bootloader_unicast_set_target command
+ * Sets the target UID of the node that should recevie the image transmitted.
+ *****************************************************************************/
+void cli_bootloader_unicast_set_target(std::ostream&,
+                                       std::string target_id_hex)
+{
+  target = hexToInt(target_id_hex);
+  printf("unicast target set\n");
+}
+
+/**************************************************************************//**
+ * CLI - bootloader_unicast_distribute command
+ * Initiates the distribution of the unicast image transmission to the target
+ * node.
+ *****************************************************************************/
+void cli_bootloader_unicast_distribute(std::ostream&,
+                                       uint32_t image_size,
+                                       std::string image_tag_hex)
+{
+  uint8_t image_tag = hexToInt(image_tag_hex);
+
+  if (gbl_image == NULL) {
+    printf("No GBL image was loaded!\n");
+    return;
+  }
+
+  EmberAfOtaUnicastBootloaderStatus status =
+    emberAfPluginOtaUnicastBootloaderServerInitiateImageDistribution(target,
+                                                                     image_size,
+                                                                     image_tag);
+
+  if (status == EMBER_OTA_UNICAST_BOOTLOADER_STATUS_SUCCESS) {
+    printf("unicast image distribution initiated\n");
+  } else {
+    printf("unicast image distribution failed 0x%x\n", status);
+  }
+}
+
+/**************************************************************************//**
+ * CLI - bootloader_unicast_request_bootload command
+ * Initiates and schedules a bootload event on the target node, resulting 
+ * in flashing the image and re-starting the target node with the new firmware.
+ *****************************************************************************/
+void cli_bootloader_unicast_request_bootload(std::ostream&,
+                                             uint32_t delay_ms,
+                                             std::string image_tag_hex)
+{
+  uint8_t image_tag = hexToInt(image_tag_hex);
+
+  EmberAfOtaUnicastBootloaderStatus status =
+    emberAfPluginUnicastBootloaderServerInitiateRequestTargetBootload(delay_ms,
+                                                                      image_tag,
+                                                                      target);
+  if (status == EMBER_OTA_UNICAST_BOOTLOADER_STATUS_SUCCESS) {
+    printf("bootload request initiated\n");
+  } else {
+    printf("bootload request failed 0x%x\n", status);
+  }
+}
+
+/**************************************************************************//**
+ * CLI - bootloader_set_tag command
+ * Sets the image tag, an 8-bit value to identify the image transmitted.
+ * The server (host) and the client (target node) must agree in the tag to
+ * start the image transmission process.
+ *****************************************************************************/
+void cli_bootloader_set_tag(std::ostream&,
+                            std::string new_image_tag_hex)
+{
+  uint8_t new_image_tag = hexToInt(new_image_tag_hex);
+
+  if (new_image_tag != ota_bootloader_test_image_tag) {
+    ota_bootloader_test_image_tag = new_image_tag;
+    ota_resume_start_counter_reset = true;
+  }
+  printf("image tag set\n");
+}
+
+/**************************************************************************//**
+ * CLI - load_gbl_file command
+ * Loads the GBL file given by its path, into a memory buffer representing the 
+ * image slot of the host. Returns the length of the file needed later for the
+ * transmission.
+ *****************************************************************************/
+void cli_load_gbl_file(std::ostream&,
+                       std::string filename)
+{
+  uint32_t gbl_size;
+
+  EmberStatus status = read_gbl_file(filename,
+                                     &gbl_image,
+                                     &gbl_size);
+
+  if (status == EMBER_BAD_ARGUMENT) {
+    printf("Can't find/load GBL file!\n");
+  } else if (status == EMBER_ERR_FATAL) {
+    printf("Can't allocate memory for GBL file!\n");
+  } else if (status == EMBER_SUCCESS) {
+    printf("GBL file of %u bytes loaded into memory.\n", gbl_size);
+  }
+}
+
+// -----------------------------------------------------------------------------
+//                          Static Function Definitions
+// -----------------------------------------------------------------------------
+
+/******************************************************************************
+* Convert hex string parameter to binary
+******************************************************************************/
+static long hexToInt(std::string hex)
+{
+  if (hex[0] == '0' && (hex[1] == 'x' || hex[1] == 'X')) {
+    hex.erase(0, 2); //remove 0x header for strtol
+  }
+  char *p;
+  long n = strtol(hex.c_str(), &p, 16);
+  if ( *p != 0 ) {
+    printf("\nBad argument, enter a hex value");
+    return 0;
+  }
+  return n;
+}
+
+/******************************************************************************
+* Convert hex byte string like e.g. "{012345}" to array { 0x01, 0x23, 0x45 }
+******************************************************************************/
+static unsigned int splitStringIntoHexArray(std::string str, uint8_t *array)
+{
+  if (str[0] == '{') { // remove '{' '}' delimiters
+    str.erase(0, 1);
+    str.pop_back();
+  }
+  for (unsigned int i = 0; i < str.length(); i += 2) {
+    std::string s = std::string() + str[i] + str[i + 1];
+    array[i / 2] = hexToInt(s) & 0xFF;
+  }
+  return(str.length() / 2);
+}
+
+
+/**************************************************************************//**
+ * Function to read the GBL file from the file system of the host file system.
+ *****************************************************************************/
+static EmberStatus read_gbl_file(std::string filename,
+                                 uint8_t** gbl_image,
+                                 uint32_t* gbl_size)
+{
+  FILE* gbl_file_hnd = NULL;
+
+  gbl_file_hnd = fopen(const_cast<char*>(filename.c_str()), "r");
+
+  if(gbl_file_hnd == NULL || gbl_size == NULL) {
+    return EMBER_BAD_ARGUMENT;
+  }
+
+  // Discard any previous image
+  free_gbl_image();
+
+  fseek(gbl_file_hnd, 0L, SEEK_END);
+  *gbl_size = ftell(gbl_file_hnd);
+
+  fseek(gbl_file_hnd, 0L, SEEK_SET);
+
+  *gbl_image = (uint8_t*)malloc(*gbl_size);
+  if(*gbl_image == NULL)
+      return EMBER_ERR_FATAL;
+
+  fread(*gbl_image, sizeof(uint8_t), *gbl_size, gbl_file_hnd);
+  fclose(gbl_file_hnd);
+
+  return EMBER_SUCCESS;
 }

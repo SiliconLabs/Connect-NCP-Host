@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
- * @brief 
+ * @brief sl_connect_sdk_ota_bootloader_test_common.h
  *******************************************************************************
  * # License
- * <b>Copyright 2023 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2018 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -27,46 +27,34 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  ******************************************************************************/
+#ifndef _SL_CONNECT_SDK_OTA_BOOTLOADER_TEST_COMMON_H_
+#define _SL_CONNECT_SDK_OTA_BOOTLOADER_TEST_COMMON_H_
+
 // -----------------------------------------------------------------------------
-//                                   Includes
+//                              Macros and Typedefs
 // -----------------------------------------------------------------------------
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <connect/ember-types.h>
-#include "sl_sensor_sink_config.h"
+// Application error status codes.
+/// Client failed to initialize the image storage.
+#define APPLICATION_STATUS_FLASH_INIT_FAILED     0xA0
+/// Client failed to write the image segment received.
+#define APPLICATION_STATUS_FLASH_WRITE_FAILED    0xA1
+/// Client refused the request due to mismatching image tag.
+#define APPLICATION_STATUS_WRONG_IMAGE_TAG       0xA2
+/// Arbitrary image tag default value.
+#define DEFAULT_IMAGE_TAG                        0x89
+/// Default behavior to reset the OTA resume counter flag
+#define DEFAULT_COUNTER_RESET                    false
 
 // -----------------------------------------------------------------------------
 //                                Global Variables
 // -----------------------------------------------------------------------------
-
-/// GBL image storage
-uint8_t* gbl_image = NULL;
-
-/// Connect security key (default)
-EmberKeyData default_security_key = { .contents = SL_SENSOR_SINK_SECURITY_KEY };
+/// Common OTA bootloader Image Tag.
+extern uint8_t ota_bootloader_test_image_tag;
+/// Flag to resume counter reset.
+extern bool ota_resume_start_counter_reset;
 
 // -----------------------------------------------------------------------------
-//                          Public Function Definitions
+//                          Public Function Declarations
 // -----------------------------------------------------------------------------
 
-/******************************************************************************
-* Prints a byte array as a string of hex values
-******************************************************************************/
-void printBuffer(const uint8_t* buffer, uint8_t length)
-{
-  uint8_t i;
-  for (i = 0; i < length; i++) {
-    printf("%02X", buffer[i]);
-  }
-}
-
-/******************************************************************************
-* Helper to free the memory buffer of a GBL file no longer used
-******************************************************************************/
-void free_gbl_image(void)
-{
-  if(gbl_image != NULL) {
-    free(gbl_image);
-  }
-}
+#endif // _SL_CONNECT_SDK_OTA_BOOTLOADER_TEST_COMMON_H_

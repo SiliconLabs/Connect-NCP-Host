@@ -52,13 +52,25 @@ extern "C" {
 extern EmberKeyData security_key;
 /// TX options set up for the network
 extern EmberMessageOptions tx_options;
+/// GBL image storage
+extern uint8_t* gbl_image;
+/// Default security set by the app during startup
+extern const EmberKeyData default_security_key;
 
 // -----------------------------------------------------------------------------
 //                          Public Function Declarations
 // -----------------------------------------------------------------------------
 #endif // __APP_COMMON__
 
+/******************************************************************************
+* Prints a byte array as a string of hex values
+******************************************************************************/
 extern void printBuffer(const uint8_t* buffer, uint8_t length);
+
+/******************************************************************************
+* Helper to free the memory buffer of a GBL file no longer used
+******************************************************************************/
+extern void free_gbl_image(void);
 
 #ifdef __cplusplus
 }

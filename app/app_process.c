@@ -41,6 +41,8 @@
 #include <string.h>
 #include <assert.h>
 #include "app_common.h"
+#include <connect/ota-unicast-bootloader-server.h>
+#include "sl_connect_sdk_ota_bootloader_test_common.h"
 
 // -----------------------------------------------------------------------------
 //                              Macros and Typedefs
@@ -54,7 +56,7 @@
 //                                Global Variables
 // -----------------------------------------------------------------------------
 /// TX options set up for the network
-EmberMessageOptions tx_options = EMBER_OPTIONS_ACK_REQUESTED;
+EmberMessageOptions tx_options = EMBER_OPTIONS_ACK_REQUESTED | EMBER_OPTIONS_SECURITY_ENABLED;
 
 static uint32_t reportErrorsCount = 0;
 static uint32_t pktsDelivered = 0;
@@ -71,9 +73,14 @@ static bool mcuSleepAllowed = false;
 
 uint32_t calValues = EMBER_CAL_INVALID_VALUE;
 
-static EmberKeyData defaultKey = { { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA,
-                                     0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA,
-                                     0xAA, 0xAA, 0xAA, 0xAA } };
+/// The image tag the client shall accept.
+uint8_t ota_bootloader_test_image_tag = DEFAULT_IMAGE_TAG;
+/// Default behavior to OTA resume counter reset.
+bool ota_resume_start_counter_reset = DEFAULT_COUNTER_RESET;
+
+// -----------------------------------------------------------------------------
+//                          Public Function Definitions
+// -----------------------------------------------------------------------------
 
 /**************************************************************************//**
  * This function is called when a message is received.
@@ -188,4 +195,57 @@ void emberAfEnergyScanCompleteCallback(int8_t mean,
 {
   printf("Energy scan complete, mean=%d min=%d max=%d var=%d\n",
          mean, min, max, variance);
+}
+
+//------------------------------------------------------------------------------
+// OTA Bootloader Server implemented callbacks.
+/**************************************************************************//**
+ * A callback invoked during an image distribution process to retrieve
+ * a contiguous segment of the image being distributed.
+ *****************************************************************************/
+bool emberAfPluginOtaUnicastBootloaderServerGetImageSegmentCallback(uint32_t startIndex,
+                                                                    uint32_t endIndex,
+                                                                    uint8_t imageTag,
+                                                                    uint8_t *imageSegment)
+{
+  printf("(server): get segment, start: %d, end: %d, tag: 0x%x\n",
+               startIndex, endIndex, imageTag);
+
+  if (imageSegment == NULL) {
+    return false;
+  }
+
+  if (gbl_image == NULL) {
+    printf("NO GBL image to transmit!\n");
+    return false;
+  }
+
+  // Move to the start of the current segment
+  uint8_t* segment_start = gbl_image;
+  segment_start += startIndex;
+  // Copy the returned segment of the image
+  memcpy(imageSegment,
+         segment_start,
+         (endIndex - startIndex + 1));
+
+  printf(".");
+
+  return true;
+}
+
+
+/**************************************************************************//**
+ * A callback invoked when the image distribution process is terminated.
+ *****************************************************************************/
+void emberAfPluginOtaUnicastBootloaderServerImageDistributionCompleteCallback(EmberAfOtaUnicastBootloaderStatus status)
+{
+  printf("image distribution completed, 0x%x\n", status);
+}
+
+/**************************************************************************//**
+ * A callback invoked when a bootload request process has completed.
+ *****************************************************************************/
+void emberAfPluginOtaUnicastBootloaderServerRequestTargetBootloadCompleteCallback(EmberAfOtaUnicastBootloaderStatus status)
+{
+  printf("bootload request completed, 0x%x\n", status);
 }

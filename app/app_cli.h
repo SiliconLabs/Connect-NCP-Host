@@ -80,8 +80,27 @@ void cli_start_energy_scan(std::ostream&,
 
 void cli_set_security_key(std::ostream&, std::string keyContents);
 
+void cli_unset_security_key(std::ostream&);
+
 void cli_counter(std::ostream&, uint8_t counterType);
 
 void reset_network_command(std::ostream&);
+
+void cli_bootloader_unicast_set_target(std::ostream&,
+                                       std::string target_id_hex);
+
+void cli_bootloader_unicast_distribute(std::ostream&,
+                                       uint32_t image_size,
+                                       std::string image_tag_hex);
+
+void cli_bootloader_unicast_request_bootload(std::ostream&,
+                                             uint32_t delay_ms,
+                                             std::string image_tag_hex);
+
+void cli_bootloader_set_tag(std::ostream&,
+                            std::string new_image_tag_hex);
+
+void cli_load_gbl_file(std::ostream&,
+                       std::string filename);
 
 #endif //__CLI_HANDLERS_H__
