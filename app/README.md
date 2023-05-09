@@ -5,6 +5,8 @@ The appication uses the public CLI https://github.com/daniele77/cli, refer to it
 
 CPC daemon needs to be running (and connected to a secondary) before launching the app.
 
+The application is also using the Boost Asio library. To install it, simply call ```sudo apt-get install libboost-all-dev``` in a terminal.
+
 ## Compile the app
 Run the following commands
 

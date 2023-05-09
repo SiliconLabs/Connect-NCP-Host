@@ -25,6 +25,8 @@ add_definitions(-DUNIX_HOST
                 )
 
 # Source files and executable
+find_package(Boost 1.70.0 REQUIRED COMPONENTS system) 
+
 include(FetchContent)
 FetchContent_Declare(
   cli
