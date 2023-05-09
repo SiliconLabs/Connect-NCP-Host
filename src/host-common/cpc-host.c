@@ -33,15 +33,22 @@
 static cpc_handle_t lib_handle;
 static cpc_endpoint_t endpoint;
 static volatile bool crash_happened = false;
-bool responseReceived = false;
 static uint8_t responseBuffer[4096]; //CPC read needs a buffer size of 4096
 
 struct pollfd ncp_fds;
+struct pollfd response_fds;
+static int pipe_fds[2];
 
 static void init_file_descriptor(int fd)
 {
   ncp_fds.fd = fd;
   ncp_fds.events = POLLIN;
+
+  if (pipe(pipe_fds) < 0) {
+    FATAL(1, "Could not initialize NCP response file descriptor (can't open pipe)");
+  }
+  response_fds.fd = pipe_fds[0];
+  response_fds.events = POLLIN;
 }
 
 //The reset callback is called in the context of the USR1 signal handler. Same care must be taken as to what is happening as when writing any other signal handler.
@@ -111,17 +118,23 @@ int cpc_rx(void *buf, unsigned int buf_len)
 
 uint8_t *wait_for_response(void)
 {
-  while (!responseReceived) {
-    //TODO: add a timeout
-    // wait for sl_connect_ncp_poll_cb()
+  uint8_t exp;
+  int ret = poll(&response_fds, 1, 1000);
+  if (ret > 0) {
+    read(pipe_fds[0], &exp, sizeof(uint8_t));
+  } else if (ret == 0) {
+    WARN("NCP response timed out");
+    read(pipe_fds[0], &exp, sizeof(uint8_t));
+  } else {
+    BUG("Poll failed in wait_for_response, with status: %d", ret);
   }
-  responseReceived = false;
   return responseBuffer;
 }
 
 void sl_connect_ncp_handle_response(void)
 {
-  responseReceived = true;
+  uint8_t resp = 0;
+  write(pipe_fds[1], &resp, sizeof(uint8_t));
 }
 
 void sl_connect_ncp_poll_cb(void)
