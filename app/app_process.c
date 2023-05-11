@@ -58,21 +58,6 @@
 /// TX options set up for the network
 EmberMessageOptions tx_options = EMBER_OPTIONS_ACK_REQUESTED | EMBER_OPTIONS_SECURITY_ENABLED;
 
-static uint32_t reportErrorsCount = 0;
-static uint32_t pktsDelivered = 0;
-static uint32_t ccaFails = 0;
-static uint32_t ackFails = 0;
-static uint32_t unknownErrors = 0;
-
-static bool fhClientTestOngoing = false;
-EmberNodeId fhClientTestServerNodeId = EMBER_NULL_NODE_ID;
-EmberPanId fhClientTestServerPanId = 0xFFFF;
-
-static bool mcuIdleAllowed = true;
-static bool mcuSleepAllowed = false;
-
-uint32_t calValues = EMBER_CAL_INVALID_VALUE;
-
 /// The image tag the client shall accept.
 uint8_t ota_bootloader_test_image_tag = DEFAULT_IMAGE_TAG;
 /// Default behavior to OTA resume counter reset.
