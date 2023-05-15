@@ -123,8 +123,8 @@ uint8_t *wait_for_response(void)
   if (ret > 0) {
     read(pipe_fds[0], &exp, sizeof(uint8_t));
   } else if (ret == 0) {
-    WARN("NCP response timed out");
     read(pipe_fds[0], &exp, sizeof(uint8_t));
+    FATAL(1, "NCP response timed out");
   } else {
     BUG("Poll failed in wait_for_response, with status: %d", ret);
   }
