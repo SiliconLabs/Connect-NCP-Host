@@ -207,7 +207,7 @@ void cli_info(std::ostream&)
   const char* is_high_prio = ((tx_options & EMBER_OPTIONS_HIGH_PRIORITY) ? ENABLED : DISABLED);
 
   printf("Info:\n");
-  printf("         Node EUI64: ");
+  printf("     Node EUI64: ");
   printBuffer(emberGetEui64(), EUI64_SIZE);
   printf("  Network state: 0x%02X\n", emberNetworkState());
   printf("      Node type: 0x%02X\n", emberGetNodeType());

@@ -30,12 +30,12 @@ void load_cli_commands(std::unique_ptr<cli::Menu>& rootMenu)
     "pjoin",
     cli_pjoin,
     "Permit join for a given time period\n \
-       <timeout>:         Number of seconds allowed to join or 0xFF for unlimited time.");
+       <timeout>:         Number of seconds allowed to join or 0xFF for unlimited time");
   rootMenu->Insert(
     "set_tx_power",
     cli_set_tx_power,
     "Sets the antenna output power\n \
-       <power>:           Power in 0.1 dB steps. Actual value is an approximated by the system and may differ.");
+       <power>:           Power in 0.1 dB steps. Actual value is an approximated by the system and may differ");
   rootMenu->Insert(
     "set_tx_options",
     cli_set_tx_options,
@@ -46,8 +46,8 @@ void load_cli_commands(std::unique_ptr<cli::Menu>& rootMenu)
     cli_remove_child,
     "Remove a specific sensor child from the list.\n \
        <address mode>:    Address modes: short=0x02, long=0x03\n \
-       <short address>:   16-bit address, e.g. remove_child 2 0x0001 {} .Can be 0 if long address used.\n \
-       <long address>:    64-bit address, e.g. remove_child 3 0 {123456789abcdef0} . Can be {} if short address used.");
+       <short address>:   16-bit address, e.g. remove_child 2 0x0001 {} .Can be 0 if long address used\n \
+       <long address>:    64-bit address, e.g. remove_child 3 0 {123456789abcdef0} . Can be {} if short address used");
   rootMenu->Insert(
     "info",
     cli_info,
@@ -81,7 +81,7 @@ void load_cli_commands(std::unique_ptr<cli::Menu>& rootMenu)
   rootMenu->Insert(
     "unset_security_key",
     cli_unset_security_key,
-    "Unset any security key in effect.");
+    "Unset any security key in effect");
   rootMenu->Insert(
     "counter",
     cli_counter,
@@ -101,21 +101,21 @@ void load_cli_commands(std::unique_ptr<cli::Menu>& rootMenu)
     cli_bootloader_unicast_distribute,
     "Initiates the OTA Unicast Image transmission for the target and tag selected\n \
        <image size>       Length of the GBL image transmitted in bytes\n \
-       <image tag>        8-bit identifier of the image transmitted. The client must agree in the tag to accept the image.");
+       <image tag>        8-bit identifier of the image transmitted. The client must agree in the tag to accept the image");
   rootMenu->Insert(
     "bootloader_unicast_request_bootload",
     cli_bootloader_unicast_request_bootload,
-    "Requests the target node to bootload the image transmitted and reboot the node running the updated image.\n \
+    "Requests the target node to bootload the image transmitted and reboot the node running the updated image\n \
        <delay>            The client is expected to schedule the firmware update after this many milliseconds\n \
-       <image tag>        8-bit identifier of the image transmitted. The client must agree in the tag to bootload.");
+       <image tag>        8-bit identifier of the image transmitted. The client must agree in the tag to bootload");
   rootMenu->Insert(
     "bootloader_set_tag",
     cli_bootloader_set_tag,
-    "Sets the 8-bit image identifier (tag) that will be associated with the stored image.\n \
-       <image tag>        8-bit identifier of the image transmitted.");
+    "Sets the 8-bit image identifier (tag) that will be associated with the stored image\n \
+       <image tag>        8-bit identifier of the image transmitted");
   rootMenu->Insert(
     "load_gbl_file",
     cli_load_gbl_file,
-    "Loads the selected GBL file from disk to RAM for transmitting it later to the target node.\n \
-       <filename>         Name of the GBL file to load.");
+    "Loads the selected GBL file from disk to RAM for transmitting it later to the target node\n \
+       <filename>         Name of the GBL file to load");
 }
