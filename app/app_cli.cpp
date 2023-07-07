@@ -209,6 +209,7 @@ void cli_info(std::ostream&)
   printf("Info:\n");
   printf("     Node EUI64: ");
   printBuffer(emberGetEui64(), EUI64_SIZE);
+  printf("\n");
   printf("  Network state: 0x%02X\n", emberNetworkState());
   printf("      Node type: 0x%02X\n", emberGetNodeType());
   printf("          eui64: >%x%x%x%x%x%x%x%x\n",
