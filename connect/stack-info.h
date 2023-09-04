@@ -208,6 +208,12 @@ EmberStatus emberSetNcpSecurityKey(uint8_t *keyContents, uint8_t keyLength);
  *  removed.
  */
 EmberStatus emberRemovePsaSecurityKey(void);
+
+/**
+ * @brief Returns the current PSA Crypto key identifier if set else 0..
+ *
+ */
+mbedtls_svc_key_id_t emberGetKeyId(void);
 #endif
 
 /** @brief Set the channel for sending and receiving messages on the current
