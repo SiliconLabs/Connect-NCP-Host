@@ -34,6 +34,7 @@ enum {
   EMBER_GET_SECURITY_KEY_IPC_COMMAND_ID                                = VNCP_CMD_ID + 0x4F,
   EMBER_SET_PSA_SECURITY_KEY_IPC_COMMAND_ID                            = VNCP_CMD_ID + 0x4C,
   EMBER_REMOVE_PSA_SECURITY_KEY_IPC_COMMAND_ID                         = VNCP_CMD_ID + 0x4D,
+  EMBER_SET_NCP_SECURITY_KEY_PERSISTENT_IPC_COMMAND_ID                 = VNCP_CMD_ID + 0x52,
   EMBER_SET_NCP_SECURITY_KEY_IPC_COMMAND_ID                            = VNCP_CMD_ID + 0x4E,
   EMBER_GET_KEY_ID_IPC_COMMAND_ID                                      = VNCP_CMD_ID + 0x50,
   EMBER_GET_COUNTER_IPC_COMMAND_ID                                     = VNCP_CMD_ID + 0x05,
