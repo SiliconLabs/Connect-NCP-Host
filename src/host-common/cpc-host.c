@@ -174,3 +174,8 @@ EmberStatus sl_connect_poll_ncp_msg(int32_t timeout)
 
   return EMBER_SUCCESS;
 }
+
+const char *sl_connect_get_ncp_gsdk_version()
+{
+  return cpc_get_secondary_app_version(lib_handle);
+}

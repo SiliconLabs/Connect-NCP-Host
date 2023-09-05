@@ -65,6 +65,12 @@ EmberStatus sl_connect_ncp_poll_callback_command(int32_t timeout);
  */
 void sl_connect_ncp_handle_pending_callback_commands();
 
+/**
+ * @brief
+ * Gets the GSDK version running on the NCP
+ */
+const char *sl_connect_get_ncp_gsdk_version();
+
 #endif //__CONNECT_API_H__
 
 #ifdef __cplusplus
