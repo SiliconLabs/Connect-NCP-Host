@@ -744,6 +744,31 @@ EmberStatus emberSetIndirectQueueTimeout(uint32_t timeoutMs)
   return status;
 }
 
+// getVersionInfo
+EmberStatus emberGetVersionInfo(uint16_t* gsdkVersion,
+                                uint16_t* connectStackVersion,
+                                uint32_t* bootloaderVersion)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_GET_VERSION_INFO_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  EmberStatus status;
+
+  fetchApiParams(apiCommandData,
+                 "uvvw",
+                 &status,
+                 gsdkVersion,
+                 connectStackVersion,
+                 bootloaderVersion);
+  releaseCommandMutex();
+  return status;
+}
+
 // messageSend
 EmberStatus emberMessageSend(EmberNodeId destination,
                              uint8_t endpoint,
