@@ -80,16 +80,24 @@ void cpc_host_startup(void)
   if (fd >= 0) {
     // The endpoint was successfully opened, which means the secondary was ready.
 
-    // we send an initial frame to confirm to the secondary that the host is connected
+    // We send an initial frame to confirm to the secondary that the host is connected
+    // This message is only needed with GSDK version 4.3.X. Version 4.4.0 introduces the
+    // CPC connection callback that makes this unlock message useless.
     {
-      uint32_t magic_value = 0xDEADBEEFu;
-      size_t size;
+      char undefined_version[10] = "UNDEFINED";
+      char gsdk_message_version[5] = "4.3.";
+      const char* current_gsdk_version = sl_connect_get_ncp_gsdk_version();
+      if ((memcmp(current_gsdk_version, undefined_version, sizeof(undefined_version)) == 0)
+          || (memcmp(current_gsdk_version, gsdk_message_version, sizeof(gsdk_message_version) - 1) == 0)) {
+        uint32_t magic_value = 0xDEADBEEFu;
+        size_t size;
 
-      size = cpc_write_endpoint(endpoint,
-                                &magic_value,
-                                sizeof(magic_value),
-                                0);   // No flags
-      (void) size;
+        size = cpc_write_endpoint(endpoint,
+                                  &magic_value,
+                                  sizeof(magic_value),
+                                  0); // No flags
+        (void) size;
+      }
 
       memset(responseBuffer, 0, sizeof(responseBuffer));
       // Set the file descriptor and start the ncp message thread
