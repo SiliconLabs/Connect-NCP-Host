@@ -1,6 +1,6 @@
 # Connect stack lib
 cmake_minimum_required(VERSION  3.16.3)
-project(connecthost VERSION 0.1.0 DESCRIPTION "Connect NCP Host Lib")
+project(connecthost VERSION 1.1.0 DESCRIPTION "Connect NCP Host Lib")
 
 include(CheckCCompilerFlag)
 check_c_compiler_flag(-Wall                  CC_HAVE_WALL)
