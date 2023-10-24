@@ -796,6 +796,47 @@ EmberStatus emberGetVersionInfo(uint16_t* gsdkVersion,
   return status;
 }
 
+// ofdmSetMcs
+EmberStatus emberOfdmSetMcs(uint8_t mcs)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_OFDM_SET_MCS_IPC_COMMAND_ID,
+                                          "u",
+                                          mcs);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  EmberStatus status;
+  fetchApiParams(apiCommandData,
+                 "u",
+                 &status);
+  releaseCommandMutex();
+  return status;
+}
+
+// ofdmGetMcs
+EmberStatus emberOfdmGetMcs(uint8_t* mcs)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_OFDM_GET_MCS_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  EmberStatus status;
+
+  fetchApiParams(apiCommandData,
+                 "uu",
+                 &status,
+                 mcs);
+  releaseCommandMutex();
+  return status;
+}
+
 // messageSend
 EmberStatus emberMessageSend(EmberNodeId destination,
                              uint8_t endpoint,
