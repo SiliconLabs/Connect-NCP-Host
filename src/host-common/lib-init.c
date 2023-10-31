@@ -17,6 +17,7 @@
 #include "ncp-host-common.h"
 #include "cpc-host.h"
 #include "callback-queue.h"
+#include "csp/csp-format.h"
 
 void sl_connect_ncp_init(void)
 {
