@@ -65,10 +65,10 @@ static void messageSentCommandHandler(uint8_t *callbackParams)
 {
   EmberStatus status;
   EmberOutgoingMessage message;
-  uint8_t payload[127];
+  uint8_t payload[2048];
   message.payload = payload;
   fetchCallbackParams(callbackParams,
-                      "uuvuuubuw",
+                      "uuvuulbuw",
                       &status,
                       &message.options,
                       &message.destination,
@@ -76,8 +76,9 @@ static void messageSentCommandHandler(uint8_t *callbackParams)
                       &message.tag,
                       &message.length,
                       message.payload,
+                      CSP_FETCH_ARG_IS_UINT16,
                       &message.length,
-                      127,
+                      2048,
                       &message.ackRssi,
                       &message.timestamp);
 
@@ -90,18 +91,19 @@ static void messageSentCommandHandler(uint8_t *callbackParams)
 static void incomingMessageCommandHandler(uint8_t *callbackParams)
 {
   EmberIncomingMessage message;
-  uint8_t payload[127];
+  uint8_t payload[2048];
   message.payload = payload;
   fetchCallbackParams(callbackParams,
-                      "uvuuubwu",
+                      "uvuulbwu",
                       &message.options,
                       &message.source,
                       &message.endpoint,
                       &message.rssi,
                       &message.length,
                       message.payload,
+                      CSP_FETCH_ARG_IS_UINT16,
                       &message.length,
-                      127,
+                      2048,
                       &message.timestamp,
                       &message.lqi);
 
@@ -113,18 +115,20 @@ static void incomingMacMessageCommandHandler(uint8_t *callbackParams)
 {
   EmberIncomingMacMessage message;
   uint8_t eui64Size = EUI64_SIZE;
-  uint8_t payload[127];
+  uint8_t payload[2048];
   message.payload = payload;
   fetchCallbackParams(callbackParams,
-                      "uvbuvbuvvuuuuwubw",
+                      "uvbuvbuvvuuuuwlbw",
                       &message.options,
                       &message.macFrame.srcAddress.addr.shortAddress,
                       message.macFrame.srcAddress.addr.longAddress,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &eui64Size,
                       EUI64_SIZE,
                       &message.macFrame.srcAddress.mode,
                       &message.macFrame.dstAddress.addr.shortAddress,
                       message.macFrame.dstAddress.addr.longAddress,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &eui64Size,
                       EUI64_SIZE,
                       &message.macFrame.dstAddress.mode,
@@ -137,8 +141,9 @@ static void incomingMacMessageCommandHandler(uint8_t *callbackParams)
                       &message.frameCounter,
                       &message.length,
                       message.payload,
+                      CSP_FETCH_ARG_IS_UINT16,
                       &message.length,
-                      127,
+                      2048,
                       &message.timestamp);
 
   emberAfIncomingMacMessageCallback(&message);
@@ -150,19 +155,21 @@ static void macMessageSentCommandHandler(uint8_t *callbackParams)
   EmberStatus status;
   EmberOutgoingMacMessage message;
   uint8_t eui64Size = EUI64_SIZE;
-  uint8_t payload[127];
+  uint8_t payload[2048];
   message.payload = payload;
   fetchCallbackParams(callbackParams,
-                      "uuvbuvbuvvuuuwubuw",
+                      "uuvbuvbuvvuuuwlbuw",
                       &status,
                       &message.options,
                       &message.macFrame.srcAddress.addr.shortAddress,
                       message.macFrame.srcAddress.addr.longAddress,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &eui64Size,
                       EUI64_SIZE,
                       &message.macFrame.srcAddress.mode,
                       &message.macFrame.dstAddress.addr.shortAddress,
                       message.macFrame.dstAddress.addr.longAddress,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &eui64Size,
                       EUI64_SIZE,
                       &message.macFrame.dstAddress.mode,
@@ -174,8 +181,9 @@ static void macMessageSentCommandHandler(uint8_t *callbackParams)
                       &message.frameCounter,
                       &message.length,
                       message.payload,
+                      CSP_FETCH_ARG_IS_UINT16,
                       &message.length,
-                      127,
+                      2048,
                       &message.ackRssi,
                       &message.timestamp);
 
@@ -201,6 +209,7 @@ static void incomingBeaconCommandHandler(uint8_t *callbackParams)
                       &panId,
                       &source.addr.shortAddress,
                       source.addr.longAddress,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &eui64Size,
                       EUI64_SIZE,
                       &source.mode,
@@ -208,10 +217,12 @@ static void incomingBeaconCommandHandler(uint8_t *callbackParams)
                       &permitJoining,
                       &beaconFieldsLength,
                       beaconFields,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &beaconFieldsLength,
                       EMBER_MAC_MAX_BEACON_FIELDS_LENGTH,
                       &beaconPayloadLength,
                       beaconPayload,
+                      CSP_FETCH_ARG_IS_UINT8,
                       &beaconPayloadLength,
                       EMBER_MAC_STACK_BEACON_PAYLOAD_LENGTH + EMBER_MAC_MAX_APP_BEACON_PAYLOAD_LENGTH);
 

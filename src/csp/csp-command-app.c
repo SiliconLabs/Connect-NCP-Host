@@ -105,6 +105,7 @@ EmberStatus emberGetSecurityKey(EmberKeyData *key)
                  "ub",
                  &status,
                  key->contents,
+                 true,
                  &Size,
                  EMBER_ENCRYPTION_KEY_SIZE);
   releaseCommandMutex();
@@ -486,7 +487,9 @@ uint8_t* emberGetEui64(void)
   fetchApiParams(apiCommandData,
                  "b",
                  eui64,
-                 &eui64Size);
+                 true,
+                 &eui64Size,
+                 EUI64_SIZE);
   releaseCommandMutex();
   return eui64;
 }
@@ -514,6 +517,7 @@ EmberStatus emberMacGetParentAddress(EmberMacAddress *parentAddress)
                  &status,
                  &parentAddress->addr.shortAddress,
                  parentAddress->addr.longAddress,
+                 true,
                  &longAddressSize,
                  EUI64_SIZE,
                  &parentAddress->mode);
@@ -699,10 +703,10 @@ EmberCalType emberGetCalType(void)
 }
 
 // getMaximumPayloadLength
-uint8_t emberGetMaximumPayloadLength(EmberMacAddressMode srcAddressMode,
-                                     EmberMacAddressMode dstAddressMode,
-                                     bool interpan,
-                                     bool secured)
+uint16_t emberGetMaximumPayloadLength(EmberMacAddressMode srcAddressMode,
+                                      EmberMacAddressMode dstAddressMode,
+                                      bool interpan,
+                                      bool secured)
 {
   acquireCommandMutex();
   uint8_t *apiCommandBuffer = getApiCommandPointer();
@@ -716,9 +720,9 @@ uint8_t emberGetMaximumPayloadLength(EmberMacAddressMode srcAddressMode,
                                           secured);
   uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
 
-  uint8_t payloadLength;
+  uint16_t payloadLength;
   fetchApiParams(apiCommandData,
-                 "u",
+                 "v",
                  &payloadLength);
   releaseCommandMutex();
   return payloadLength;
@@ -810,6 +814,48 @@ EmberStatus emberOfdmGetMcs(uint8_t* mcs)
   return status;
 }
 
+// ncpSetLongMessagesUse
+EmberStatus emberNcpSetLongMessagesUse(bool useLongMessages)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_NCP_SET_LONG_MESSAGES_USE_IPC_COMMAND_ID,
+                                          "u",
+                                          useLongMessages);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  EmberStatus status;
+  fetchApiParams(apiCommandData,
+                 "u",
+                 &status);
+  if (status == EMBER_SUCCESS) {
+    set_csp_format_long_message_use(useLongMessages);
+  }
+  releaseCommandMutex();
+  return status;
+}
+
+// usingLongMessages
+bool emberUsingLongMessages(void)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_USING_LONG_MESSAGES_IPC_COMMAND_ID,
+                                          "");
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  bool usingLongMessages;
+  fetchApiParams(apiCommandData,
+                 "u",
+                 &usingLongMessages);
+  releaseCommandMutex();
+  return usingLongMessages;
+}
+
 // messageSend
 EmberStatus emberMessageSend(EmberNodeId destination,
                              uint8_t endpoint,
@@ -823,7 +869,7 @@ EmberStatus emberMessageSend(EmberNodeId destination,
   uint16_t length = formatResponseCommand(apiCommandBuffer,
                                           MAX_STACK_API_COMMAND_SIZE,
                                           EMBER_MESSAGE_SEND_IPC_COMMAND_ID,
-                                          "vuuubu",
+                                          "vuulbu",
                                           destination,
                                           endpoint,
                                           messageTag,
@@ -872,7 +918,7 @@ EmberStatus emberMacMessageSend(EmberMacFrame *macFrame,
   uint16_t length = formatResponseCommand(apiCommandBuffer,
                                           MAX_STACK_API_COMMAND_SIZE,
                                           EMBER_MAC_MESSAGE_SEND_IPC_COMMAND_ID,
-                                          "vbuvbuvvuuuubu",
+                                          "vbuvbuvvuuulbu",
                                           macFrame->srcAddress.addr.shortAddress,
                                           macFrame->srcAddress.addr.longAddress,
                                           EUI64_SIZE,
@@ -1018,6 +1064,7 @@ EmberStatus emberGetChildInfo(EmberMacAddress *address,
                  &status,
                  &addressResp->addr.shortAddress,
                  addressResp->addr.longAddress,
+                 true,
                  &longAddressSize,
                  EUI64_SIZE,
                  &addressResp->mode,

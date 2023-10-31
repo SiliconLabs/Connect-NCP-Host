@@ -58,6 +58,15 @@ static void reset_crash_callback(void)
   FATAL(1, "Communication with CPC daemon has been severed");
 }
 
+bool gsdk_version_is_younger_than_v_4_4(void)
+{
+  char undefined_version[10] = "UNDEFINED";
+  char gsdk_message_version[5] = "4.3.";
+  const char* current_gsdk_version = sl_connect_get_ncp_gsdk_version();
+  return ((memcmp(current_gsdk_version, undefined_version, sizeof(undefined_version)) == 0)
+          || (memcmp(current_gsdk_version, gsdk_message_version, sizeof(gsdk_message_version) - 1) == 0));
+}
+
 void cpc_host_startup(void)
 {
   int ret;
@@ -84,11 +93,7 @@ void cpc_host_startup(void)
     // This message is only needed with GSDK version 4.3.X. Version 4.4.0 introduces the
     // CPC connection callback that makes this unlock message useless.
     {
-      char undefined_version[10] = "UNDEFINED";
-      char gsdk_message_version[5] = "4.3.";
-      const char* current_gsdk_version = sl_connect_get_ncp_gsdk_version();
-      if ((memcmp(current_gsdk_version, undefined_version, sizeof(undefined_version)) == 0)
-          || (memcmp(current_gsdk_version, gsdk_message_version, sizeof(gsdk_message_version) - 1) == 0)) {
+      if (gsdk_version_is_younger_than_v_4_4()) {
         uint32_t magic_value = 0xDEADBEEFu;
         size_t size;
 

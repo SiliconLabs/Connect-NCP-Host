@@ -209,7 +209,7 @@ enum
 /**
  * @brief Message length in bytes.
  */
-typedef uint8_t EmberMessageLength;
+typedef uint16_t EmberMessageLength;
 
 /**
  * @brief Message options.

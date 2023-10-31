@@ -20,8 +20,12 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <string.h>
+#include <connect/ember.h>
 #include "log/log.h"
 #include "connect/byte-utilities.h"
+#include "host-common/cpc-host.h"
+
+static bool use_long_message_length = false;
 
 // TODO: the two functions below can be consolidated
 
@@ -56,6 +60,19 @@ void fetchParams(uint8_t *readPointer, char *format, va_list args)
         readPointer += 2;
       }
       break;
+      case 'l': {
+        uint16_t *realPointer = (uint16_t *)ptr;
+        if (use_long_message_length) {
+          *realPointer = emberFetchHighLowInt16u(readPointer);
+          readPointer += 2;
+        } else {
+          if (ptr) {
+            *realPointer = (uint16_t)*readPointer;
+          }
+          readPointer++;
+        }
+      }
+      break;
       case 'w': {
         uint32_t *realPointer = (uint32_t *)ptr;
         if (ptr) {
@@ -66,35 +83,68 @@ void fetchParams(uint8_t *readPointer, char *format, va_list args)
       break;
       case 'b': {
         uint8_t *realArray = (uint8_t *)ptr;
-        uint8_t *lengthPointer = (uint8_t *)va_arg(args, void*);
-        *lengthPointer = *readPointer;
-        readPointer++;
-        uint8_t bufferSize = (uint8_t)va_arg(args, unsigned int);
+        uint16_t bufferAvailableSize;
+        uint16_t bufferLength = 0;
+        if (use_long_message_length) {
+          bufferLength = emberFetchHighLowInt16u(readPointer);
+          readPointer += sizeof(uint16_t);
+        } else {
+          bufferLength = (uint16_t)*readPointer;
+          readPointer++;
+        }
 
-        if (ptr) {
-          if (*lengthPointer <= bufferSize) {
-            memmove(realArray, readPointer, *lengthPointer);
-          } else {
-            memmove(realArray, readPointer, bufferSize);
+        uint8_t isUint8 = (uint8_t)va_arg(args, unsigned int);
+        if (isUint8) {
+          uint8_t *lengthPointer = (uint8_t *)va_arg(args, void*);
+          bufferAvailableSize = (uint16_t)va_arg(args, unsigned int);
+          *lengthPointer = (uint8_t)(bufferLength & 0xFF);
+          // Propagate correct length value in calling function
+          if (*lengthPointer > bufferAvailableSize) {
+            *lengthPointer = bufferAvailableSize;
+          }
+        } else {
+          uint16_t *lengthPointer = (uint16_t *)va_arg(args, void*);
+          bufferAvailableSize = (uint16_t)va_arg(args, unsigned int);
+          *lengthPointer = bufferLength;
+          // Propagate correct length value in calling function
+          if (*lengthPointer > bufferAvailableSize) {
+            *lengthPointer = bufferAvailableSize;
           }
         }
-        readPointer += *lengthPointer;
-        // Propagate correct length value in calling function
-        if (*lengthPointer > bufferSize) {
-          *lengthPointer = bufferSize;
+
+        if (ptr) {
+          if (bufferLength <= bufferAvailableSize) {
+            memmove(realArray, readPointer, bufferLength);
+          } else {
+            memmove(realArray, readPointer, bufferAvailableSize);
+          }
         }
+        readPointer += bufferLength;
       }
       break;
       case 'p': {
         uint8_t **realPointer = (uint8_t **)ptr;
-        uint8_t *lengthPointer = (uint8_t *)va_arg(args, void*);
-        *lengthPointer = *readPointer;
-        readPointer++;
+        uint16_t bufferLength;
+        if (use_long_message_length) {
+          bufferLength = emberFetchHighLowInt16u(readPointer);
+          readPointer += sizeof(uint16_t);
+        } else {
+          bufferLength = (uint16_t)*readPointer;
+          readPointer++;
+        }
 
+        uint8_t isUint8 = (uint8_t)va_arg(args, unsigned int);
+        if (isUint8) {
+          uint8_t *lengthPointer = (uint8_t *)va_arg(args, void*);
+          *lengthPointer = (uint8_t)(bufferLength & 0xFF);
+        } else {
+          uint16_t *lengthPointer = (uint16_t *)va_arg(args, void*);
+          *lengthPointer = bufferLength;
+        }
         if (ptr) {
           *realPointer = readPointer;
         }
-        readPointer += *lengthPointer;
+        readPointer += bufferLength;
       }
       break;
       default:
@@ -122,13 +172,26 @@ uint8_t computeCommandLength(uint8_t initialLength, const char* format, va_list 
         va_arg(argumentList, unsigned int);
         commandLength += sizeof(uint16_t);
         break;
+      case 'l': {
+        va_arg(argumentList, unsigned int);
+        if (use_long_message_length) {
+          commandLength += sizeof(uint16_t);
+        } else {
+          commandLength++;
+        }
+        break;
+      }
       case 'w':
         va_arg(argumentList, uint32_t);
         commandLength += sizeof(uint32_t);
         break;
       case 'b': {
         va_arg(argumentList, const uint8_t*);
-        commandLength += va_arg(argumentList, int) + 1;
+        if (use_long_message_length) {
+          commandLength += va_arg(argumentList, int) + 2;
+        } else {
+          commandLength += va_arg(argumentList, int) + 1;
+        }
         break;
       }
       default:
@@ -191,6 +254,15 @@ uint16_t formatResponseCommandFromArgList(uint8_t *buffer,
         emberStoreHighLowInt16u(finger, va_arg(argumentList, unsigned int));
         finger += sizeof(uint16_t);
         break;
+      case 'l': {
+        if (use_long_message_length) {
+          emberStoreHighLowInt16u(finger, va_arg(argumentList, unsigned int));
+          finger += sizeof(uint16_t);
+        } else {
+          *finger++ = (uint8_t)(va_arg(argumentList, unsigned int) & 0xFF);
+        }
+        break;
+      }
       case 'w':
         if (sizeof(unsigned int) < sizeof(uint32_t)) {
           emberStoreHighLowInt32u(finger, va_arg(argumentList, uint32_t));
@@ -201,9 +273,15 @@ uint16_t formatResponseCommandFromArgList(uint8_t *buffer,
         break;
       case 'b': {
         const uint8_t *data = va_arg(argumentList, const uint8_t*);
-        // store the size, must fit into a byte
-        uint8_t dataSize = va_arg(argumentList, int);
-        *finger++ = dataSize;
+        uint16_t dataSize = (uint16_t)va_arg(argumentList, int);
+        if (use_long_message_length) {
+          // store the size, must fit into 2 bytes
+          emberStoreHighLowInt16u(finger, dataSize);
+          finger += sizeof(uint16_t);
+        } else {
+          // store the size, must fit into a byte
+          *finger++ = (uint8_t)(dataSize & 0xFF);
+        }
 
         if (dataSize > 0) {
           // Checking for NULL here save's every caller from checking.  We assume
@@ -247,4 +325,9 @@ uint16_t formatResponseCommand(uint8_t *buffer,
                                                      argumentList);
   va_end(argumentList);
   return length;
+}
+
+void set_csp_format_long_message_use(bool use_long_messages)
+{
+  use_long_message_length = use_long_messages;
 }

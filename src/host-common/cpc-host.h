@@ -23,11 +23,13 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdbool.h>
 
 void cpc_host_startup(void);
 int cpc_tx(const void *buf, unsigned int buf_len);
 int cpc_rx(void *buf, unsigned int buf_len);
 uint8_t *wait_for_response(void);
+bool gsdk_version_is_younger_than_v_4_4(void);
 
 #ifdef __cplusplus
 }
