@@ -12,7 +12,7 @@ Run the following commands
 
 ```
 # Compile the app
-cd connect-host-library
+cd connect-host-library/app
 mkdir build
 cd build
 cmake ../
