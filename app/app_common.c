@@ -68,5 +68,6 @@ void free_gbl_image(void)
 {
   if(gbl_image != NULL) {
     free(gbl_image);
+    gbl_image = NULL;
   }
 }
