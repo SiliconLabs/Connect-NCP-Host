@@ -258,7 +258,6 @@ mbedtls_svc_key_id_t emberGetKeyId(void);
  */
 EmberStatus emberSetRadioChannelExtended(uint16_t channel, bool persistent);
 
-#if defined(DOXYGEN_SHOULD_SKIP_THIS) || defined(UNIX_HOST)
 /** @brief Set the channel for sending and receiving messages on the current
  * network. The available channels depend on the radio config you use. Channels
  * can differ more than the frequency if it's a multi-PHY config.
@@ -278,10 +277,6 @@ EmberStatus emberSetRadioChannelExtended(uint16_t channel, bool persistent);
  *   task.
  */
 EmberStatus emberSetRadioChannel(uint16_t channel);
-#else
-#define emberSetRadioChannel(channel) \
-  (emberSetRadioChannelExtended((channel), 1))
-#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 /** @brief Get the radio channel, to which a node is set, on the current
  * network. The available channels depend on the radio config you use.
@@ -328,7 +323,6 @@ EmberStatus emberPhyConfigInit(EmberPhyType phyType);
 EmberStatus emberCalibrateCurrentChannelExtended(uint32_t calValueIn,
                                                  uint32_t *calValueOut);
 
-#if defined(DOXYGEN_SHOULD_SKIP_THIS) || defined(UNIX_HOST)
 /** @brief Perform image rejection calibration on the current channel. The
  * stack will notify the application that it needs channel calibration via the
  * ::emberRadioNeedsCalibratingHandler() callback function during
@@ -337,11 +331,8 @@ EmberStatus emberCalibrateCurrentChannelExtended(uint32_t calValueIn,
  * function is called when the radio is off, it will turn the radio on and leave
  * it on.
  */
-void emberCalibrateCurrentChannel(void);
-#else
 #define emberCalibrateCurrentChannel() \
   (emberCalibrateCurrentChannelExtended(EMBER_CAL_INVALID_VALUE, NULL))
-#endif
 
 /** @brief Apply Image Rejection calibration on the current channel. The
  * stack will notify the application that it needs channel calibration via the
@@ -530,12 +521,7 @@ uint16_t emberCurrentStackTasks(void);
  * @return \b true if the application may sleep but the stack may be expecting
  * incoming messages.
  */
-#if defined(DOXYGEN_SHOULD_SKIP_THIS) || defined(UNIX_HOST)
 bool emberOkToNap(void);
-#else
-#define emberOkToNap() \
-  (!(emberCurrentStackTasks() & EMBER_HIGH_PRIORITY_TASKS))
-#endif
 
 /** @brief Indicate whether the stack currently has any pending tasks.
  *
@@ -545,22 +531,13 @@ bool emberOkToNap(void);
  *
  * @return \b true if the application may sleep for as long as it wishes.
  */
-#if defined(DOXYGEN_SHOULD_SKIP_THIS) || defined(UNIX_HOST)
 bool emberOkToHibernate(void);
-#else
-#define emberOkToHibernate() (!emberCurrentStackTasks())
-#endif
 
-#if defined(DOXYGEN_SHOULD_SKIP_THIS) || defined(UNIX_HOST)
 /** @brief Return the EUI64 ID of the local node.
  *
  * @return The 64-bit ID.
  */
-#ifdef UNIX_HOST
-uint8_t* emberGetEui64(void);
-#else
-EmberEUI64 emberGetEui64(void);
-#endif
+uint8_t *emberGetEui64(void);
 
 /** @brief Determine whether \c eui64 is the local node's EUI64 ID. EUI64 is
  * easily accessible in SoC mode, but in Host-NCP, the address is stored on the
@@ -596,22 +573,6 @@ EmberNodeType emberGetNodeType(void);
  * @return The parent's node ID.
  */
 EmberNodeId emberGetParentId(void);
-
-#else // Doxygen ignores the following
-extern EmberNodeId emLocalNodeId;
-#define emberGetNodeId() (emLocalNodeId)
-extern EmberPanId emLocalPanId;
-#define emberGetPanId() (emLocalPanId)
-extern EmberNodeId emParentId;
-#define emberGetParentId() (emParentId)
-extern EmberNodeType emNodeType;
-#define emberGetNodeType() (emNodeType)
-extern EmberEUI64 emLocalEui64;
-#define emberGetEui64() (emLocalEui64)
-#define emberIsLocalEui64(eui64) \
-  (MEMCOMPARE((eui64), emLocalEui64, EUI64_SIZE) == 0)
-
-#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 /** @brief Get the GSDK, Stack and bootloader versions all at once. The version
  * format are not all the same. Please refer to the corresponding documentation
