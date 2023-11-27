@@ -277,7 +277,6 @@ EmberStatus emberSetRadioChannelExtended(uint16_t channel,
   return status;
 }
 
-#ifdef UNIX_HOST
 // setRadioChannel
 EmberStatus emberSetRadioChannel(uint16_t channel)
 {
@@ -297,8 +296,6 @@ EmberStatus emberSetRadioChannel(uint16_t channel)
   releaseCommandMutex();
   return status;
 }
-
-#endif
 
 // getRadioChannel
 uint16_t emberGetRadioChannel(void)
@@ -435,7 +432,6 @@ uint16_t emberCurrentStackTasks(void)
   return currentTasks;
 }
 
-#ifdef UNIX_HOST
 // okToNap
 bool emberOkToNap(void)
 {
@@ -455,9 +451,6 @@ bool emberOkToNap(void)
   return isOkToNap;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // okToHibernate
 bool emberOkToHibernate(void)
 {
@@ -477,9 +470,6 @@ bool emberOkToHibernate(void)
   return isOkToHibernate;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // getEui64
 uint8_t* emberGetEui64(void)
 {
@@ -500,8 +490,6 @@ uint8_t* emberGetEui64(void)
   releaseCommandMutex();
   return eui64;
 }
-
-#endif
 
 // macGetParentAddress
 EmberStatus emberMacGetParentAddress(EmberMacAddress *parentAddress)
@@ -533,7 +521,6 @@ EmberStatus emberMacGetParentAddress(EmberMacAddress *parentAddress)
   return status;
 }
 
-#ifdef UNIX_HOST
 // isLocalEui64
 bool emberIsLocalEui64(EmberEUI64 eui64)
 {
@@ -554,9 +541,6 @@ bool emberIsLocalEui64(EmberEUI64 eui64)
   return localEui64;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // getNodeId
 EmberNodeId emberGetNodeId(void)
 {
@@ -576,9 +560,6 @@ EmberNodeId emberGetNodeId(void)
   return nodeId;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // getPanId
 EmberPanId emberGetPanId(void)
 {
@@ -598,9 +579,6 @@ EmberPanId emberGetPanId(void)
   return panId;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // getParentId
 EmberNodeId emberGetParentId(void)
 {
@@ -620,9 +598,6 @@ EmberNodeId emberGetParentId(void)
   return parentNodeId;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // getNodeType
 EmberNodeType emberGetNodeType(void)
 {
@@ -641,8 +616,6 @@ EmberNodeType emberGetNodeType(void)
   releaseCommandMutex();
   return nodeType;
 }
-
-#endif
 
 // calibrateCurrentChannelExtended
 EmberStatus emberCalibrateCurrentChannelExtended(uint32_t calValueIn,
@@ -1304,7 +1277,6 @@ EmberStatus emberJoinNetworkExtended(EmberNodeType nodeType,
   return status;
 }
 
-#ifdef UNIX_HOST
 // joinNetwork
 EmberStatus emberJoinNetwork(EmberNodeType nodeType,
                              EmberNetworkParameters *parameters)
@@ -1329,9 +1301,6 @@ EmberStatus emberJoinNetwork(EmberNodeType nodeType,
   return status;
 }
 
-#endif
-
-#ifdef UNIX_HOST
 // macFormNetwork
 EmberStatus emberMacFormNetwork(EmberNetworkParameters *parameters)
 {
@@ -1353,8 +1322,6 @@ EmberStatus emberMacFormNetwork(EmberNetworkParameters *parameters)
   releaseCommandMutex();
   return status;
 }
-
-#endif
 
 // permitJoining
 EmberStatus emberPermitJoining(uint8_t duration)

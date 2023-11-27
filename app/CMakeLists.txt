@@ -20,8 +20,7 @@ if(CC_HAVE_WNO_STRINGOP_OVERFLOW)
     add_compile_options(-Wno-stringop-overflow)
 endif()
 
-add_definitions(-DUNIX_HOST
-                -DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
+add_definitions(-DSL_CATALOG_CONNECT_AES_SECURITY_PRESENT
                 )
 
 # Source files and executable
