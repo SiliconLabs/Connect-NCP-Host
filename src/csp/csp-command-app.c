@@ -378,6 +378,26 @@ EmberStatus emberSetRadioPowerMode(bool radioOn)
   return status;
 }
 
+// setUnencryptedPacketsAcceptance
+EmberStatus emberSetUnencryptedPacketsAcceptance(bool accept)
+{
+  acquireCommandMutex();
+  uint8_t *apiCommandBuffer = getApiCommandPointer();
+  uint16_t length = formatResponseCommand(apiCommandBuffer,
+                                          MAX_STACK_API_COMMAND_SIZE,
+                                          EMBER_SET_UNENCRYPTED_PACKETS_ACCEPTANCE_IPC_COMMAND_ID,
+                                          "u",
+                                          accept);
+  uint8_t *apiCommandData = sendBlockingCommand(apiCommandBuffer, length);
+
+  EmberStatus status;
+  fetchApiParams(apiCommandData,
+                 "u",
+                 &status);
+  releaseCommandMutex();
+  return status;
+}
+
 // setMacParams
 EmberStatus emberSetMacParams(int8_t ccaThreshold,
                               uint8_t maxCcaAttempts,
