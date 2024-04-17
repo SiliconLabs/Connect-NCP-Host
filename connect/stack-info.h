@@ -412,6 +412,19 @@ int16_t emberGetRadioPower(void);
  */
 EmberStatus emberSetRadioPowerMode(bool radioOn);
 
+/** @brief Set if the stack should forward unencrypted messages to the
+ * application.
+ *
+ * @param[in] accept  If this parameter is \b true, unencrypted messages are
+ * forwarded to the application. They are not if this parameter is \b false.
+ *
+ * @return An ::EmberStatus value of ::EMBER_INVALID_CALL if trying to filter
+ * out unencrypted message and if the stack cannot receive encrypted messages
+ * (eg. no security key is set). An ::EmberStatus value of ::EMBER_SUCCESS
+ * otherwise.
+ */
+EmberStatus emberSetUnencryptedPacketsAcceptance(bool accept);
+
 /** @brief Set the MAC layer transmission parameters.
  *
  * @param[in] ccaThreshold   The CCA RSSI threshold, in dBm, above which the

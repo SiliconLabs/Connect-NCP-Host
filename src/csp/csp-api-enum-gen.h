@@ -44,6 +44,7 @@ enum {
   EMBER_SET_RADIO_POWER_IPC_COMMAND_ID                                 = VNCP_CMD_ID + 0x08,
   EMBER_GET_RADIO_POWER_IPC_COMMAND_ID                                 = VNCP_CMD_ID + 0x09,
   EMBER_SET_RADIO_POWER_MODE_IPC_COMMAND_ID                            = VNCP_CMD_ID + 0x0A,
+  EMBER_SET_UNENCRYPTED_PACKETS_ACCEPTANCE_IPC_COMMAND_ID              = VNCP_CMD_ID + 0x58,
   EMBER_SET_MAC_PARAMS_IPC_COMMAND_ID                                  = VNCP_CMD_ID + 0x0B,
   EMBER_CURRENT_STACK_TASKS_IPC_COMMAND_ID                             = VNCP_CMD_ID + 0x0C,
   EMBER_OK_TO_NAP_IPC_COMMAND_ID                                       = VNCP_CMD_ID + 0x0D,
