@@ -1,6 +1,19 @@
 Connect NCP Host Library Release Note
 ==============================
 
+# Release 2.0
+(release date 2024-10-08)
+
+## New Features and Improvements
+* added support of SUN-FSK and SUN-OFDM. Enable the transmission and reception of packets carrying up to 2033 bytes of payload.
+* added APIs emberOfdmSetMcs() and emberOfdmGetMcs() to get and set the OFDM MCS when SUN-OFDM is used.
+* update EmberMessageLength typedef to allow the message length to be coded on 16 bits.
+* added API emberUsingLongMessages() to enable the support of NCP messages codes on 16 bits. Default to 8 bits messages.
+* added API emberSetUnencryptedPacketsAcceptance() to accept or refuse unencrypted packets.
+
+## Bug Fixes
+* fixed a segmentation fault while freeing a new firmware image
+
 # Release 1.1.0
 (release date 2023-10-17)
 
